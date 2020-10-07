@@ -12,9 +12,15 @@ import java.util.Optional;
 public class ScheduleUpdateListener implements Observer{
 
     private final ScheduleService scheduleService;
+    private final WorkbookFetcher workbookFetcher;
 
     public ScheduleUpdateListener() {
         throw new AssertionError();
+    }
+
+    public ScheduleUpdateListener(ScheduleService scheduleService, WorkbookFetcher workbookFetcher) {
+        this.scheduleService = scheduleService;
+        this.workbookFetcher = workbookFetcher;
     }
 
     @Override
@@ -24,7 +30,7 @@ public class ScheduleUpdateListener implements Observer{
 
         if (url.isPresent()) {
             Optional<LocalDateTime> date = CustomExtractor.extractLatestUpdateDate();
-            Optional<Workbook> workbook = new WorkbookFetcher().fetchWorkbook(url);
+            Optional<Workbook> workbook = workbookFetcher.fetchWorkbook(url);
 
             if (date.isPresent() && workbook.isPresent()) {
                 //parsing to schedule

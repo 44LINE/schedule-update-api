@@ -1,5 +1,7 @@
 package com.github.line.sheduleupdateapi.domain;
 
+import com.github.line.sheduleupdateapi.service.EntityType;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
@@ -8,7 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "grouped_daily_schedules", uniqueConstraints = @UniqueConstraint(columnNames = {"id"}))
-public class GroupedDailySchedule {
+public class GroupedDailySchedule implements EntityType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

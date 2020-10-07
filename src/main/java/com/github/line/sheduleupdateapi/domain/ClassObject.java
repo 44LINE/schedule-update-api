@@ -19,15 +19,15 @@ public class ClassObject {
     private String name;
 
     @Column(name = "short_name")
-    private String short_name;
+    private String shortName;
 
     public ClassObject() {
     }
 
-    public ClassObject(Long id, String name, String short_name) {
+    public ClassObject(Long id, String name, String shortName) {
         this.id = id;
         this.name = name;
-        this.short_name = short_name;
+        this.shortName = shortName;
     }
 
     public Long getId() {
@@ -46,12 +46,12 @@ public class ClassObject {
         this.name = name;
     }
 
-    public String getShort_name() {
-        return short_name;
+    public String getShortName() {
+        return shortName;
     }
 
-    public void setShort_name(String short_name) {
-        this.short_name = short_name;
+    public void setShortName(String shortName) {
+        this.shortName = shortName;
     }
 
 }

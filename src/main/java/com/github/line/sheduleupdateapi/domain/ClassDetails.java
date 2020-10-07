@@ -1,13 +1,14 @@
 package com.github.line.sheduleupdateapi.domain;
 
 import com.github.line.sheduleupdateapi.enums.ClassType;
+import com.github.line.sheduleupdateapi.service.EntityType;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "class_details", uniqueConstraints = @UniqueConstraint(columnNames = {"id"}))
-public class ClassDetails {
+public class ClassDetails implements EntityType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

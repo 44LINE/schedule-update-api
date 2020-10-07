@@ -1,5 +1,6 @@
 package com.github.line.sheduleupdateapi.config;
 
+import com.github.line.sheduleupdateapi.domain.ScheduleVersion;
 import com.github.line.sheduleupdateapi.repository.ScheduleRepository;
 import com.github.line.sheduleupdateapi.repository.ScheduleVersionRepository;
 import com.github.line.sheduleupdateapi.service.*;
@@ -17,9 +18,9 @@ public class BeansConfig {
 
     //repositories
     @Resource
-    public ScheduleVersionRepository scheduleVersionRepository;
-    @Resource
     public ScheduleRepository scheduleRepository;
+    @Resource
+    public ScheduleVersionRepository scheduleVersionRepository;
 
     //components
     @Bean
@@ -32,15 +33,9 @@ public class BeansConfig {
     public ScheduleService scheduleService() {
         return new ScheduleService(urlInputStreamFetcher(), scheduleRepository);
     }
-    @Bean
-    public ScheduleVersionService scheduleVersionService() {
-        return new ScheduleVersionService(scheduleVersionRepository);
-    }
 
     public final List<Observer> observers() {
         List<Observer> observers = new ArrayList<>();
-        observers.add(scheduleVersionService());
-        observers.add(scheduleService());
 
         return Collections.unmodifiableList(observers);
     }
