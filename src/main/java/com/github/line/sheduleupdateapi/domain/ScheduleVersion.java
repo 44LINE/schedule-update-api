@@ -1,12 +1,15 @@
 package com.github.line.sheduleupdateapi.domain;
 
+import com.github.line.sheduleupdateapi.service.EntityType;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Entity
 @Table(name = "schedule_versions", uniqueConstraints = @UniqueConstraint(columnNames = {"id", "url", "addition_date"}))
-public class ScheduleVersion{
+public class ScheduleVersion implements EntityType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,12 +29,12 @@ public class ScheduleVersion{
     private LocalDateTime additionDate;
 
     @OneToOne(mappedBy = "scheduleVersion")
-    private Schedule schedule;
+    private Optional<? extends Entity> schedule;
 
     public ScheduleVersion() {
     }
 
-    public ScheduleVersion(Long id, @NotNull String url, @NotNull LocalDateTime updateDate, @NotNull LocalDateTime additionDate, Schedule schedule) {
+    public ScheduleVersion(Long id, @NotNull String url, @NotNull LocalDateTime updateDate, @NotNull LocalDateTime additionDate, Optional<? extends Entity> schedule) {
         this.id = id;
         this.url = url;
         this.updateDate = updateDate;
@@ -71,11 +74,11 @@ public class ScheduleVersion{
         this.additionDate = additionDate;
     }
 
-    public Schedule getSchedule() {
+    public Optional<? extends Entity> getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(Schedule schedule) {
+    public void setSchedule(Optional<? extends Entity> schedule) {
         this.schedule = schedule;
     }
 }

@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.util.Objects;
 import java.util.Optional;
 
+//Helper class working with Java libraries
 public final class TemporaryFile {
     private TemporaryFile() {
         throw new AssertionError();

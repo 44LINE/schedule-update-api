@@ -1,9 +1,9 @@
 package com.github.line.sheduleupdateapi.service;
 
-import com.github.line.sheduleupdateapi.apache.WorkbookFetcher;
+import com.github.line.sheduleupdateapi.domain.ScheduleVersion;
 import com.github.line.sheduleupdateapi.utils.CustomExtractor;
-import org.apache.poi.ss.usermodel.Workbook;
 
+import javax.persistence.Entity;
 import javax.transaction.Transactional;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -12,15 +12,15 @@ import java.util.Optional;
 public class ScheduleUpdateListener implements Observer{
 
     private final ScheduleService scheduleService;
-    private final WorkbookFetcher workbookFetcher;
+    private final PreparedEntityFactory preparedEntityFactory;
 
-    public ScheduleUpdateListener() {
+    private ScheduleUpdateListener() {
         throw new AssertionError();
     }
 
-    public ScheduleUpdateListener(ScheduleService scheduleService, WorkbookFetcher workbookFetcher) {
+    public ScheduleUpdateListener(ScheduleService scheduleService, PreparedEntityFactory preparedEntityFactory) {
         this.scheduleService = scheduleService;
-        this.workbookFetcher = workbookFetcher;
+        this.preparedEntityFactory = preparedEntityFactory;
     }
 
     @Override
@@ -30,10 +30,18 @@ public class ScheduleUpdateListener implements Observer{
 
         if (url.isPresent()) {
             Optional<LocalDateTime> date = CustomExtractor.extractLatestUpdateDate();
-            Optional<Workbook> workbook = workbookFetcher.fetchWorkbook(url);
+            if (date.isPresent()) {
+                ScheduleVersion scheduleVersion = new ScheduleVersion();
+                Optional<? extends Entity> schedule = preparedEntityFactory.create(url.get(), scheduleVersion);
+                if (schedule.isPresent()) {
+                    scheduleVersion.setId(null);
+                    scheduleVersion.setUrl(url.get().getPath());
+                    scheduleVersion.setUpdateDate(date.get());
+                    scheduleVersion.setSchedule(schedule);
+                    scheduleVersion.setAdditionDate(LocalDateTime.now());
 
-            if (date.isPresent() && workbook.isPresent()) {
-                //parsing to schedule
+                    //scheduleService.todo
+                }
             }
         }
     }

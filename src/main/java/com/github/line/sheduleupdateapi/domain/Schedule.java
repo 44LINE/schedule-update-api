@@ -5,6 +5,7 @@ import com.github.line.sheduleupdateapi.service.EntityType;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -22,7 +23,7 @@ public class Schedule implements EntityType {
 
     @OneToMany(mappedBy = "schedule")
     @NotNull
-    private Set<GroupedDailySchedule> dailySchedule;
+    private List<GroupedDailySchedule> dailySchedule;
 
     @Column(name = "is_latest")
     @NotNull
@@ -31,7 +32,7 @@ public class Schedule implements EntityType {
     public Schedule() {
     }
 
-    public Schedule(long id, ScheduleVersion scheduleVersion, @NotNull Set<GroupedDailySchedule> dailySchedule, @NotNull boolean isLatest) {
+    public Schedule(long id, ScheduleVersion scheduleVersion, @NotNull List<GroupedDailySchedule> dailySchedule, @NotNull boolean isLatest) {
         this.id = id;
         this.scheduleVersion = scheduleVersion;
         this.dailySchedule = dailySchedule;
@@ -54,11 +55,11 @@ public class Schedule implements EntityType {
         this.scheduleVersion = scheduleVersion;
     }
 
-    public Set<GroupedDailySchedule> getDailySchedule() {
-        return Collections.unmodifiableSet(dailySchedule);
+    public List<GroupedDailySchedule> getDailySchedule() {
+        return Collections.unmodifiableList(dailySchedule);
     }
 
-    public void setDailySchedule(Set<GroupedDailySchedule> dailySchedule) {
+    public void setDailySchedule(List<GroupedDailySchedule> dailySchedule) {
         this.dailySchedule = dailySchedule;
     }
 

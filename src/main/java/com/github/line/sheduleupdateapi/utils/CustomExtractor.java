@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
+// class fetches data from html document
 @Immutable
 public final class CustomExtractor {
 

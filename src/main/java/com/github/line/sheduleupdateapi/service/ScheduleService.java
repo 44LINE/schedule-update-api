@@ -1,52 +1,59 @@
 package com.github.line.sheduleupdateapi.service;
 
+import com.github.line.sheduleupdateapi.domain.ClassDetails;
+import com.github.line.sheduleupdateapi.domain.GroupedDailySchedule;
 import com.github.line.sheduleupdateapi.domain.Schedule;
 import com.github.line.sheduleupdateapi.domain.ScheduleVersion;
+import com.github.line.sheduleupdateapi.repository.ClassDetailsRepository;
+import com.github.line.sheduleupdateapi.repository.GroupedDailyScheduleRepository;
 import com.github.line.sheduleupdateapi.repository.ScheduleRepository;
+import com.github.line.sheduleupdateapi.repository.ScheduleVersionRepository;
 import com.github.line.sheduleupdateapi.utils.CustomExtractor;
-import com.github.line.sheduleupdateapi.utils.InputStreamFetcher;
 
 import javax.transaction.Transactional;
 import java.net.URL;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
-public class ScheduleService implements Observer{
-    private final InputStreamFetcher inputStreamFetcher;
-    private final ScheduleRepository repository;
+public class ScheduleService{
+    private final ScheduleRepository scheduleRepository;
+    private final ScheduleVersionRepository scheduleVersionRepository;
+    private final GroupedDailyScheduleRepository groupedDailyScheduleRepository;
+    private final ClassDetailsRepository classDetailsRepository;
 
     private ScheduleService() {
         throw new AssertionError();
     }
 
-    public ScheduleService(InputStreamFetcher inputStreamFetcher, ScheduleRepository repository) {
-        this.inputStreamFetcher = inputStreamFetcher;
+    public ScheduleService(ScheduleRepository repository) {
         this.repository = repository;
     }
 
-    @Override
     @Transactional
-    public void update() {
-        Optional<ScheduleVersion> scheduleVersion = newScheduleVersion();
-        if (scheduleVersion.isPresent()) {
-            //saving
-        }
+    public void save(Schedule schedule) {
+        List<GroupedDailySchedule> groupedDailySchedules = schedule.getDailySchedule();
+        List<ClassDetails> classDetails = groupedDailySchedules.stream().map(groupedDailySchedule -> {
+            return groupedDailySchedule.getClassDetails();
+        }).collect(Collections.unmodifiableList(ArrayList::new));
     }
 
-    private Optional<ScheduleVersion> newScheduleVersion() {
-        Optional<URL> extractedUrl = CustomExtractor.extractDownloadUrl();
-        Optional<LocalDateTime> extractedDate = CustomExtractor.extractLatestUpdateDate();
-
-        if (extractedUrl.isPresent() && extractedDate.isPresent()) {
-            return Optional.of(new ScheduleVersion(
-                       null,
-                        extractedUrl.get().toString(),
-                        extractedDate.get(),
-                        LocalDateTime.now(),
-                    null
-            ));
-        } else {
-            return Optional.empty();
-        }
+    private void saveSchedule(Schedule schedule) {
+        scheduleRepository.save(schedule);
     }
+
+    private void saveScheduleVersion(ScheduleVersion scheduleVersion) {
+        scheduleVersionRepository.save(scheduleVersion);
+    }
+
+    private void saveGroupedDailySchedules(List<GroupedDailySchedule> groupedDailySchedules) {
+        groupedDailyScheduleRepository.saveAll(groupedDailySchedules);
+    }
+
+    private void saveClassDetails(List<ClassDetails> classDetails) {
+        classDetailsRepository.saveAll(classDetails);
+    }
+
 }
