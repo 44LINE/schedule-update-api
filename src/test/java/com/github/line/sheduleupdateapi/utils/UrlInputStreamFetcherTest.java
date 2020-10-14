@@ -17,11 +17,8 @@ class UrlInputStreamFetcherTest {
     @Test
     public void fetch_urlNull_throwsNullPointerException() {
 
-        //given
-        UrlInputStreamFetcher urlInputStreamFetcher = new UrlInputStreamFetcher();
-
         //then
-        Assertions.assertThrows(NullPointerException.class, () -> urlInputStreamFetcher.fetch(null));
+        Assertions.assertThrows(NullPointerException.class, () -> UrlInputStreamFetcher.fetch(null));
     }
 
     @Test
@@ -29,17 +26,15 @@ class UrlInputStreamFetcherTest {
 
         //given
         Object urlInstance = new Object();
-        UrlInputStreamFetcher urlInputStreamFetcher = new UrlInputStreamFetcher();
 
         //then
-        Assertions.assertThrows(IllegalArgumentException.class, () -> urlInputStreamFetcher.fetch(urlInstance));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> UrlInputStreamFetcher.fetch((URL) urlInstance));
     }
 
     @Test
     public void fetch_urlOk_returnsTrue() {
 
         //given
-        UrlInputStreamFetcher urlInputStreamFetcher = new UrlInputStreamFetcher();
         URL urlInstance = null;
 
         try {
@@ -60,7 +55,7 @@ class UrlInputStreamFetcherTest {
         //when
         byte[] result = null;
         try {
-            result = IOUtils.readAllBytes(urlInputStreamFetcher.fetch(urlInstance).get());
+            result = IOUtils.readAllBytes(UrlInputStreamFetcher.fetch(urlInstance).get());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -73,8 +68,6 @@ class UrlInputStreamFetcherTest {
     public void fetch_urlOkDifferentSources_returnsFalse() {
 
         //given
-        UrlInputStreamFetcher urlInputStreamFetcher = new UrlInputStreamFetcher();
-
         URL urlInstance = null;
         try {
             urlInstance = new URL("https://it.pk.edu.pl/download/cdda61ee117a8cbd3152612e48adcc92/15_INFORMATYKA-lato-rozklad-STACJONARNE-2019_2020.xls");
@@ -94,7 +87,7 @@ class UrlInputStreamFetcherTest {
         //when
         byte[] result = null;
         try {
-            result = IOUtils.readAllBytes(urlInputStreamFetcher.fetch(urlInstance).get());
+            result = IOUtils.readAllBytes(UrlInputStreamFetcher.fetch(urlInstance).get());
         } catch (IOException e) {
             e.printStackTrace();
         }

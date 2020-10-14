@@ -24,7 +24,6 @@ public final class WorkbookHelper {
         }
     }
 
-
     public static List<Cell> getColumnFromSheet(Sheet sheet, int columnIndex) {
         List<Cell> column = new ArrayList<>();
 

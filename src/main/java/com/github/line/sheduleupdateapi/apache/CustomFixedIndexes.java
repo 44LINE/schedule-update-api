@@ -1,5 +1,7 @@
 package com.github.line.sheduleupdateapi.apache;
 
+import java.time.LocalDate;
+
 class CustomFixedIndexes {
 
     final static int DEFAULT_SHEET_INDEX = 0;
@@ -14,6 +16,8 @@ class CustomFixedIndexes {
     final static int GROUP_TWO_COLUMN_INDEX = 11;
     final static int GROUP_THREE_COLUMN_INDEX = 12;
     final static int GROUP_FOUR_COLUMN_INDEX = 13;
+
+    final static LocalDate INITIAL_DATE = LocalDate.of(2020, 10, 03);
 
     private CustomFixedIndexes() {
         throw new AssertionError();

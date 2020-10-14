@@ -1,6 +1,8 @@
 package com.github.line.sheduleupdateapi.domain;
 
 import com.github.line.sheduleupdateapi.service.EntityType;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -17,11 +19,13 @@ public class Schedule implements EntityType {
     @Column(name = "id")
     private long id;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "version_id", referencedColumnName = "id", nullable = false)
     private ScheduleVersion scheduleVersion;
 
-    @OneToMany(mappedBy = "schedule")
+    @OneToMany(mappedBy = "schedule", fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SELECT)
     @NotNull
     private List<GroupedDailySchedule> dailySchedule;
 

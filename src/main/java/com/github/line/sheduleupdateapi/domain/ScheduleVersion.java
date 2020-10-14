@@ -1,6 +1,8 @@
 package com.github.line.sheduleupdateapi.domain;
 
 import com.github.line.sheduleupdateapi.service.EntityType;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -28,13 +30,14 @@ public class ScheduleVersion implements EntityType {
     @NotNull
     private LocalDateTime additionDate;
 
-    @OneToOne(mappedBy = "scheduleVersion")
-    private Optional<? extends Entity> schedule;
+    @OneToOne(mappedBy = "scheduleVersion", fetch = FetchType.LAZY)
+    @Fetch(FetchMode.SELECT)
+    private Schedule schedule;
 
     public ScheduleVersion() {
     }
 
-    public ScheduleVersion(Long id, @NotNull String url, @NotNull LocalDateTime updateDate, @NotNull LocalDateTime additionDate, Optional<? extends Entity> schedule) {
+    public ScheduleVersion(Long id, @NotNull String url, @NotNull LocalDateTime updateDate, @NotNull LocalDateTime additionDate, Schedule schedule) {
         this.id = id;
         this.url = url;
         this.updateDate = updateDate;
@@ -74,11 +77,11 @@ public class ScheduleVersion implements EntityType {
         this.additionDate = additionDate;
     }
 
-    public Optional<? extends Entity> getSchedule() {
+    public Schedule getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(Optional<? extends Entity> schedule) {
+    public void setSchedule(Schedule schedule) {
         this.schedule = schedule;
     }
 }

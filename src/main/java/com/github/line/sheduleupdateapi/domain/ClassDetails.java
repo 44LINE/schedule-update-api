@@ -2,6 +2,8 @@ package com.github.line.sheduleupdateapi.domain;
 
 import com.github.line.sheduleupdateapi.enums.ClassType;
 import com.github.line.sheduleupdateapi.service.EntityType;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -16,10 +18,12 @@ public class ClassDetails implements EntityType {
     private Long id;
 
     @ManyToOne
+    @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "class_object_id", referencedColumnName = "id", nullable = false)
     private ClassObject classObject;
 
     @ManyToOne
+    @Fetch(FetchMode.JOIN)
     @JoinColumn(name = "lecturer_id", referencedColumnName = "id", nullable = false)
     private Lecturer lecturer;
 

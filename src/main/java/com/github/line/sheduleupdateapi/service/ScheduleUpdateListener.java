@@ -1,5 +1,6 @@
 package com.github.line.sheduleupdateapi.service;
 
+import com.github.line.sheduleupdateapi.domain.Schedule;
 import com.github.line.sheduleupdateapi.domain.ScheduleVersion;
 import com.github.line.sheduleupdateapi.utils.CustomExtractor;
 
@@ -11,16 +12,18 @@ import java.util.Optional;
 
 public class ScheduleUpdateListener implements Observer{
 
-    private final ScheduleService scheduleService;
-    private final PreparedEntityFactory preparedEntityFactory;
+    //private final ScheduleService scheduleService;
+    private final PreparedEntityFactory preparedScheduleFactory;
 
     private ScheduleUpdateListener() {
         throw new AssertionError();
     }
 
-    public ScheduleUpdateListener(ScheduleService scheduleService, PreparedEntityFactory preparedEntityFactory) {
-        this.scheduleService = scheduleService;
-        this.preparedEntityFactory = preparedEntityFactory;
+    public ScheduleUpdateListener(//ScheduleService scheduleService,
+                                  PreparedEntityFactory preparedScheduleFactory) {
+        //this.scheduleService = scheduleService;
+        System.out.println("listener constr");
+        this.preparedScheduleFactory = preparedScheduleFactory;
     }
 
     @Override
@@ -31,14 +34,21 @@ public class ScheduleUpdateListener implements Observer{
         if (url.isPresent()) {
             Optional<LocalDateTime> date = CustomExtractor.extractLatestUpdateDate();
             if (date.isPresent()) {
+                //
+                System.out.println(date.get().toString());
+                //
                 ScheduleVersion scheduleVersion = new ScheduleVersion();
-                Optional<? extends Entity> schedule = preparedEntityFactory.create(url.get(), scheduleVersion);
+                Optional<? extends Entity> schedule = preparedScheduleFactory.create(url.get(), scheduleVersion);
                 if (schedule.isPresent()) {
                     scheduleVersion.setId(null);
                     scheduleVersion.setUrl(url.get().getPath());
                     scheduleVersion.setUpdateDate(date.get());
-                    scheduleVersion.setSchedule(schedule);
+                    //
+                    System.out.println(url.toString() + " " + LocalDateTime.now().toString());
+                    //
+                    scheduleVersion.setSchedule((Schedule) schedule.get());
                     scheduleVersion.setAdditionDate(LocalDateTime.now());
+
 
                     //scheduleService.todo
                 }

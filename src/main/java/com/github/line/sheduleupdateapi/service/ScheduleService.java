@@ -1,3 +1,4 @@
+/*
 package com.github.line.sheduleupdateapi.service;
 
 import com.github.line.sheduleupdateapi.domain.ClassDetails;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class ScheduleService{
     private final ScheduleRepository scheduleRepository;
@@ -35,9 +37,10 @@ public class ScheduleService{
     @Transactional
     public void save(Schedule schedule) {
         List<GroupedDailySchedule> groupedDailySchedules = schedule.getDailySchedule();
-        List<ClassDetails> classDetails = groupedDailySchedules.stream().map(groupedDailySchedule -> {
-            return groupedDailySchedule.getClassDetails();
-        }).collect(Collections.unmodifiableList(ArrayList::new));
+        List<ClassDetails> classDetails = groupedDailySchedules
+                .stream()
+                .map(groupedDailySchedule -> { return groupedDailySchedule.getClassDetails();})
+                .collect(toUnmofii);
     }
 
     private void saveSchedule(Schedule schedule) {
@@ -57,3 +60,4 @@ public class ScheduleService{
     }
 
 }
+*/

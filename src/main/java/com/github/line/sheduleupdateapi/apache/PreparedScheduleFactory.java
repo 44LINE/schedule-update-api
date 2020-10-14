@@ -30,10 +30,9 @@ public class PreparedScheduleFactory implements PreparedEntityFactory {
     }
 
     @Override
-    public Iterable<? extends Entity> create(Collection<?> singleColumn, Entity schedule) {
-        return null;
+    public Iterable<? extends Entity> create(Collection<?> columnsContent, Entity schedule) {
+        return preparedGroupedDailyScheduleFactory.create(columnsContent, schedule);
     }
-
 
     @Override
     public Optional<? extends Entity> create(Object url, Entity scheduleVersion) {
@@ -45,13 +44,7 @@ public class PreparedScheduleFactory implements PreparedEntityFactory {
                 Schedule schedule = new Schedule();
                 schedule.setLatest(true);
                 schedule.setScheduleVersion((ScheduleVersion) scheduleVersion);
-
-                List<GroupedDailySchedule> groupedDailySchedules = new ArrayList<>();
-                for (List<String> singleColumn:preparedCollections.get()) {
-                    groupedDailySchedules.add((GroupedDailySchedule) create(singleColumn, schedule));
-                }
-
-                schedule.setDailySchedule(groupedDailySchedules);
+                schedule.setDailySchedule((List<GroupedDailySchedule>) create(preparedCollections.get(), schedule));
                 return Optional.of(schedule);
             }
         }
@@ -68,10 +61,8 @@ public class PreparedScheduleFactory implements PreparedEntityFactory {
                     return splitCells(sheet.get());
                 }
             }
-        } else {
-            return Optional.empty();
-
         }
+        return Optional.empty();
     }
 
     private Optional<List<List<String>>> splitCells(Sheet sheet) {
