@@ -1,11 +1,14 @@
 package com.github.line.sheduleupdateapi.domain;
 
 import com.github.line.sheduleupdateapi.service.EntityType;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -25,8 +28,9 @@ public class GroupedDailySchedule implements EntityType {
     @Column(name = "date")
     private LocalDate date;
 
-    @OneToMany(mappedBy = "groupedDailySchedule")
-    private Set<ClassDetails> classDetails;
+    @OneToMany(mappedBy = "groupedDailySchedule", fetch = FetchType.EAGER)
+    @Fetch(FetchMode.SELECT )
+    private List<ClassDetails> classDetails;
 
     @ManyToOne
     @JoinColumn(name = "schedule_id", referencedColumnName = "id", nullable = false)
@@ -35,7 +39,7 @@ public class GroupedDailySchedule implements EntityType {
     public GroupedDailySchedule() {
     }
 
-    public GroupedDailySchedule(long id, @NotNull long groupId, @NotNull LocalDate date, Set<ClassDetails> classDetails, Schedule schedule) {
+    public GroupedDailySchedule(long id, @NotNull long groupId, @NotNull LocalDate date, List<ClassDetails> classDetails, Schedule schedule) {
         this.id = id;
         this.groupId = groupId;
         this.date = date;
@@ -47,7 +51,7 @@ public class GroupedDailySchedule implements EntityType {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -67,11 +71,11 @@ public class GroupedDailySchedule implements EntityType {
         this.date = date;
     }
 
-    public Set<ClassDetails> getClassDetails() {
-        return Collections.unmodifiableSet(classDetails);
+    public List<ClassDetails> getClassDetails() {
+        return Collections.unmodifiableList(classDetails);
     }
 
-    public void setClassDetails(Set<ClassDetails> classDetails) {
+    public void setClassDetails(List<ClassDetails> classDetails) {
         this.classDetails = classDetails;
     }
 

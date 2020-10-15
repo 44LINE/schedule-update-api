@@ -9,13 +9,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Optional;
 
-public class UrlInputStreamFetcher implements InputStreamFetcher {
-    @Override
-    public Optional<InputStream> fetch(Object url) {
+public class UrlInputStreamFetcher {
+    private UrlInputStreamFetcher() {
+        throw new AssertionError();
+    }
+
+    public static Optional<InputStream> fetch(URL url) {
         if (url == null) {
             throw new NullPointerException("Resource cannot be null value.");
-        } else if (!(url instanceof URL)) {
-            throw new IllegalArgumentException("Resource must be URL instance.");
         }
 
         Optional<HttpURLConnection> httpURLConnection = openAndCheckConnection((URL) url);
@@ -23,7 +24,7 @@ public class UrlInputStreamFetcher implements InputStreamFetcher {
         return (httpURLConnection.isPresent()) ? httpUrlConnectionToInputStream(httpURLConnection.get()) : Optional.empty();
     }
 
-    private Optional<HttpURLConnection> openAndCheckConnection(URL url) {
+    private static Optional<HttpURLConnection> openAndCheckConnection(URL url) {
         try {
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("GET");
@@ -38,7 +39,7 @@ public class UrlInputStreamFetcher implements InputStreamFetcher {
         }
     }
 
-    private Optional<InputStream> httpUrlConnectionToInputStream(HttpURLConnection httpURLConnection) {
+    private static Optional<InputStream> httpUrlConnectionToInputStream(HttpURLConnection httpURLConnection) {
         try {
             return Optional.of(httpURLConnection.getInputStream());
         } catch (IOException e) {

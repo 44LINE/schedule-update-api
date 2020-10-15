@@ -1,12 +1,17 @@
 package com.github.line.sheduleupdateapi.domain;
 
+import com.github.line.sheduleupdateapi.service.EntityType;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Entity
 @Table(name = "schedule_versions", uniqueConstraints = @UniqueConstraint(columnNames = {"id", "url", "addition_date"}))
-public class ScheduleVersion{
+public class ScheduleVersion implements EntityType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,7 +30,8 @@ public class ScheduleVersion{
     @NotNull
     private LocalDateTime additionDate;
 
-    @OneToOne(mappedBy = "scheduleVersion")
+    @OneToOne(mappedBy = "scheduleVersion", fetch = FetchType.LAZY)
+    @Fetch(FetchMode.SELECT)
     private Schedule schedule;
 
     public ScheduleVersion() {

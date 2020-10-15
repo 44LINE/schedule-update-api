@@ -30,10 +30,8 @@ public class ScheduledVersionTracker implements Observable{
 
     @Override
     public void notifyObservers() {
-        for (Observer observer: this.observers
-             ) {
+        for (Observer observer: this.observers) {
             observer.update();
-
         }
     }
 

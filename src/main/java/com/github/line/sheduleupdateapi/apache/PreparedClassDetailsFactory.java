@@ -25,36 +25,39 @@ public class PreparedClassDetailsFactory implements PreparedEntityFactory {
     }
 
     @Override
-    public Iterable<ClassDetails> create(Collection<? extends Object> queue, Entity selfReference) {
-        if (!(queue instanceof LinkedBlockingQueue || queue.getClass().getComponentType().equals(String.class) || selfReference instanceof GroupedDailySchedule)) {
+    public Iterable<ClassDetails> create(Collection<? extends Object> dailyClasses, Entity groupedDailyScheduleReference) {
+        if (!(dailyClasses instanceof LinkedBlockingQueue || dailyClasses.getClass().getComponentType().equals(String.class) || groupedDailyScheduleReference instanceof GroupedDailySchedule)) {
             throw new IllegalArgumentException();
         }
 
-        HashSet<ClassDetails> classDetails = queue
+        List<ClassDetails> classDetails = dailyClasses
                 .stream()
-                .map(item -> create(item, selfReference).get())
-                .collect(Collectors.toCollection(HashSet::new));
+                .map(item -> create(item, groupedDailyScheduleReference)
+                        .orElseThrow(IllegalStateException::new))
+                .collect(Collectors.toCollection(ArrayList::new));
 
         rowIndex.lazySet(0);
-        return Collections.unmodifiableSet(classDetails);
+        return Collections.unmodifiableList(classDetails);
     }
 
     @Override
-    public Optional<ClassDetails> create(Object argument, Entity selfReference) {
+    public Optional<ClassDetails> create(Object argument, Entity groupedDailyScheduleReference) {
         DayTimePeriods dayTimePeriod = DayTimePeriods.retrieveDayTimePeriod(rowIndex.getAndIncrement());
         ClassPeriod classPeriod = new ClassPeriod(dayTimePeriod);
         Optional<Pair<Lecturer, ClassObject>> pair = fixedRowMapper.findEntitiesByRowValue((String) argument);
 
         if (pair.isPresent()) {
+            rowIndex.getAndIncrement(); rowIndex.getAndIncrement();
             return Optional.of(new ClassDetails(
                     null,
                     pair.get().getValue(),
                     pair.get().getKey(),
                     ClassType.retrieveClassType((String) argument),
                     classPeriod,
-                    (GroupedDailySchedule) selfReference
+                    (GroupedDailySchedule) groupedDailyScheduleReference
             ));
         }
+
         return Optional.empty();
     }
 
