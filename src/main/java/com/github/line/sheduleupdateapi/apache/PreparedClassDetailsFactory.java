@@ -67,7 +67,7 @@ public class PreparedClassDetailsFactory implements PreparedEntityFactory {
                         null,
                         pair.get().getValue(),
                         pair.get().getKey(),
-                        //ClassType.retrieveClassType((String) argument),
+                        ClassType.retrieveClassType((String) argument),
                         classPeriod,
                         (GroupedDailySchedule) groupedDailyScheduleReference
                 ));

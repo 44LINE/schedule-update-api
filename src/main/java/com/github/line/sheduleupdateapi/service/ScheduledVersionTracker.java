@@ -35,7 +35,7 @@ public class ScheduledVersionTracker implements Observable{
     }
 
     public void enable() {
-        scheduler.scheduleWithFixedDelay(track, 0, 30, TimeUnit.SECONDS);
+        scheduler.scheduleWithFixedDelay(track, 0, 30, TimeUnit.MINUTES);
     }
 
     void disable() {

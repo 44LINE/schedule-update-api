@@ -30,7 +30,6 @@ public class ApacheScheduleUpdateHandler implements ScheduleUpdateHandler {
                 ScheduleVersion scheduleVersion = new ScheduleVersion();
                 Optional<Schedule> schedule = (Optional<Schedule>) preparedScheduleFactory.create(url.get(), scheduleVersion);
                 if (schedule.isPresent()) {
-                    System.out.println("schedule prepared gds size:" + schedule.get().getDailySchedule().size());
                     scheduleVersion.setId(null);
                     scheduleVersion.setUrl(url.get().toString());
                     scheduleVersion.setUpdateDate(date.get());

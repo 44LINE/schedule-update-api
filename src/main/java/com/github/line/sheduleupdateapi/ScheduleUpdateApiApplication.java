@@ -18,10 +18,8 @@ import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfigurat
 
 @SpringBootApplication
 public class ScheduleUpdateApiApplication {
-
 	public ScheduleUpdateApiApplication(@Autowired ScheduledVersionTracker scheduledVersionTracker)
 	{
-		System.out.println("App constr");
 		scheduledVersionTracker.enable();
 	}
 

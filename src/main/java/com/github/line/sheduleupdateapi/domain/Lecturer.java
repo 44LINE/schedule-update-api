@@ -30,7 +30,7 @@ public class Lecturer {
     public Lecturer() {
     }
 
-    public Lecturer(Long id, @NotNull String name, @NotNull String surname, @NotNull String shortName, @NotNull String email) {
+    public Lecturer(Long id, @NotNull String name, @NotNull String surname, @NotNull String shortName, String email) {
         this.id = id;
         this.name = name;
         this.surname = surname;

@@ -36,7 +36,7 @@ class ClassDetailsRepositoryTest {
                 null,
                 classObject,
                 lecturer,
-                //ClassType.LECTURE,
+                ClassType.LECTURE,
                 period,
                 null
         );

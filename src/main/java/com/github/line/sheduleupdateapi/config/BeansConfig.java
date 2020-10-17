@@ -47,7 +47,7 @@ public class BeansConfig {
     }
     @Bean
     public ScheduleService scheduleService() {
-        return new ScheduleService(scheduleRepository, scheduleVersionRepository, groupedDailyScheduleRepository, classDetailsRepository);
+        return new ScheduleService(scheduleRepository, groupedDailyScheduleRepository, classDetailsRepository);
     }
 
     //mappers

@@ -4,6 +4,7 @@ import com.github.line.sheduleupdateapi.enums.ClassType;
 import com.github.line.sheduleupdateapi.service.EntityType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.Type;
 import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
@@ -29,9 +30,8 @@ public class ClassDetails implements EntityType {
     private Lecturer lecturer;
 
     @Column(name = "type")
-    //@Enumerated(EnumType.STRING)
-    //@NotNull
-    //@Type(type = "enums.ClassTypePostgres")
+    @Enumerated(EnumType.STRING)
+    @NotNull
     private ClassType type;
 
     @Embedded
@@ -43,13 +43,11 @@ public class ClassDetails implements EntityType {
 
     public ClassDetails() {}
 
-    public ClassDetails(Long id, ClassObject classObject, Lecturer lecturer,
-                        //@NotNull ClassType type,
-                        ClassPeriod classPeriod, GroupedDailySchedule groupedDailySchedule) {
+    public ClassDetails(Long id, ClassObject classObject, Lecturer lecturer, ClassType type, ClassPeriod classPeriod, GroupedDailySchedule groupedDailySchedule) {
         this.id = id;
         this.classObject = classObject;
         this.lecturer = lecturer;
-        //this.type = type;
+        this.type = type;
         this.classPeriod = classPeriod;
         this.groupedDailySchedule = groupedDailySchedule;
     }
@@ -100,5 +98,18 @@ public class ClassDetails implements EntityType {
 
     public void setGroupedDailySchedule(GroupedDailySchedule groupedDailySchedule) {
         this.groupedDailySchedule = groupedDailySchedule;
+    }
+
+    @Override
+    public String toString() {
+        return "ClassDetails{" +
+                "id=" + id +
+                ", classObject.name='" + this.classObject.getName() + '\'' +
+                ", lecturer.surname='" + this.lecturer.getSurname() + '\'' +
+                ", classType='" + this.type.toString() + '\'' +
+                ", classPeriod='" + this.classPeriod.getStartTime().toString() + "-" + classPeriod.getEndTime().toString() + '\'' +
+                ", group='" + this.groupedDailySchedule.getGroupId() + '\'' +
+                ", date='" + this.groupedDailySchedule.getDate() + '\'' +
+                '}';
     }
 }
