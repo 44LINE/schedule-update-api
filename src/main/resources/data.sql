@@ -21,6 +21,9 @@ values (null, '', 'Piotr',  'PM', 'Malecki');
 insert into lecturers
 values (null, '', 'Joanna',  'JD', 'Dudek');
 
+insert into lecturers
+values (null, '', 'Katarzyna ',  'KSm', 'Smelcerz');
+
 --CLASSES INSERT
 
 insert into class_objects

@@ -10,7 +10,7 @@ public class Lecturer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private long id;
+    private Long id;
 
     @Column(name = "name")
     @NotNull
@@ -30,7 +30,7 @@ public class Lecturer {
     public Lecturer() {
     }
 
-    public Lecturer(long id, @NotNull String name, @NotNull String surname, @NotNull String shortName, @NotNull String email) {
+    public Lecturer(Long id, @NotNull String name, @NotNull String surname, @NotNull String shortName, @NotNull String email) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -38,11 +38,11 @@ public class Lecturer {
         this.email = email;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -4,6 +4,7 @@ import com.github.line.sheduleupdateapi.enums.ClassType;
 import com.github.line.sheduleupdateapi.service.EntityType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -29,7 +30,7 @@ public class ClassDetails implements EntityType {
 
     @Column(name = "type")
     //@Enumerated(EnumType.STRING)
-    @NotNull
+    //@NotNull
     //@Type(type = "enums.ClassTypePostgres")
     private ClassType type;
 
@@ -42,11 +43,13 @@ public class ClassDetails implements EntityType {
 
     public ClassDetails() {}
 
-    public ClassDetails(Long id, ClassObject classObject, Lecturer lecturer, @NotNull ClassType type, ClassPeriod classPeriod, GroupedDailySchedule groupedDailySchedule) {
+    public ClassDetails(Long id, ClassObject classObject, Lecturer lecturer,
+                        //@NotNull ClassType type,
+                        ClassPeriod classPeriod, GroupedDailySchedule groupedDailySchedule) {
         this.id = id;
         this.classObject = classObject;
         this.lecturer = lecturer;
-        this.type = type;
+        //this.type = type;
         this.classPeriod = classPeriod;
         this.groupedDailySchedule = groupedDailySchedule;
     }

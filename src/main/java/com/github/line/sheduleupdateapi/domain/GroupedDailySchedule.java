@@ -18,7 +18,7 @@ public class GroupedDailySchedule implements EntityType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private long id;
+    private Long id;
 
     @Column(name = "group_id")
     @NotNull
@@ -39,7 +39,7 @@ public class GroupedDailySchedule implements EntityType {
     public GroupedDailySchedule() {
     }
 
-    public GroupedDailySchedule(long id, @NotNull long groupId, @NotNull LocalDate date, List<ClassDetails> classDetails, Schedule schedule) {
+    public GroupedDailySchedule(Long id, @NotNull long groupId, @NotNull LocalDate date, List<ClassDetails> classDetails, Schedule schedule) {
         this.id = id;
         this.groupId = groupId;
         this.date = date;
@@ -47,7 +47,7 @@ public class GroupedDailySchedule implements EntityType {
         this.schedule = schedule;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

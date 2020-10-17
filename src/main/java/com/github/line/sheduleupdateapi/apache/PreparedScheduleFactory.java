@@ -36,11 +36,12 @@ public class PreparedScheduleFactory implements PreparedEntityFactory {
 
     @Override
     public Optional<? extends Entity> create(Object url, Entity scheduleVersion) {
-        if (!(url instanceof URL || scheduleVersion instanceof ScheduleVersion)) {
+        if (!(url instanceof URL && scheduleVersion instanceof ScheduleVersion)) {
             throw new IllegalArgumentException();
         } else {
             Optional<List<List<String>>> preparedCollections = fetchAndPrepareData((URL) url);
             if (preparedCollections.isPresent()) {
+
                 Schedule schedule = new Schedule();
                 schedule.setLatest(true);
                 schedule.setScheduleVersion((ScheduleVersion) scheduleVersion);
@@ -51,6 +52,7 @@ public class PreparedScheduleFactory implements PreparedEntityFactory {
         return Optional.empty();
     }
 
+    //works
     private Optional<List<List<String>>> fetchAndPrepareData(URL url) {
         Optional<InputStream> inputStream = UrlInputStreamFetcher.fetch(url);
         if (inputStream.isPresent()) {
@@ -65,13 +67,14 @@ public class PreparedScheduleFactory implements PreparedEntityFactory {
         return Optional.empty();
     }
 
+    //work
     private Optional<List<List<String>>> splitCells(Sheet sheet) {
         List<Pair<Map<Integer, Pair<Integer, Integer>>, List<String>>>  addressRangeContent = new ArrayList<>();
 
         for (int index = GROUP_ONE_COLUMN_INDEX; index<= GROUP_FOUR_COLUMN_INDEX; index++) {
             addressRangeContent.add(
                     new Pair<>(getAddressAndRangeMergedCellsInColumn(sheet, index),
-                            getCellContent(getColumnFromSheet(sheet, index))));
+                               getCellContent(getColumnFromSheet(sheet, index))));
         }
 
         return Optional.of(splitMergedCells(addressRangeContent));

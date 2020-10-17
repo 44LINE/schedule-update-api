@@ -1,5 +1,6 @@
 package com.github.line.sheduleupdateapi.apache;
 
+import com.fasterxml.jackson.core.JsonToken;
 import com.github.line.sheduleupdateapi.domain.ClassObject;
 import com.github.line.sheduleupdateapi.domain.Lecturer;
 import com.github.line.sheduleupdateapi.service.ClassObjectService;
@@ -28,6 +29,7 @@ public final class FixedRowMapper {
 
     //less-code solution
     public Optional<Pair<Lecturer, ClassObject>> mapToLecturerAndClassObjectPair(String rowValue) {
+        System.out.println("mapping: " +rowValue);
         for (Lecturer lecturer: lecturers
              ) {
             if (rowValue.contains(lecturer.getSurname()) || rowValue.contains(lecturer.getShortName())) {
@@ -37,7 +39,8 @@ public final class FixedRowMapper {
                 ) {
                     if (rowValue.contains(classObject.getName()) || rowValue.contains(classObject.getShortName())) {
                         Optional<ClassObject> matchingClassObject = Optional.of(classObject);
-                        return Optional.of(new Pair(matchingLecturer.get(), matchingClassObject.get()));
+                        System.out.println("result of mapping: " + matchingClassObject.get().getName());
+                        return Optional.of(new Pair<>(matchingLecturer.get(), matchingClassObject.get()));
                     }
                 }
             }
@@ -47,11 +50,14 @@ public final class FixedRowMapper {
 
     //using additional collections
     public Optional<Pair<Lecturer, ClassObject>> findEntitiesByRowValue(String rowValue) {
+        init();
         Optional<Long> classObjectId = contains(classObjectsKeywords, rowValue);
         if (classObjectId.isPresent()) {
+
             Optional<Long> lecturerId = contains(lecturersKeywords, rowValue);
             if (lecturerId.isPresent()) {
-                Pair<Lecturer, ClassObject> pair = new Pair(lecturers.get(classObjectId.get().intValue()), classObjects.get(classObjectId.get().intValue()));
+
+                Pair<Lecturer, ClassObject> pair = new Pair(lecturers.get(lecturerId.get().intValue()), classObjects.get(classObjectId.get().intValue()));
                 return Optional.of(pair);
             }
         }
@@ -59,8 +65,9 @@ public final class FixedRowMapper {
     }
 
     private Optional<Long> contains(Map<Pair<String, String>, Long> strings, String rowValue) {
-        for (Pair<String, String> pair: strings.keySet()
-             ) {
+        strings.size();
+        for (Pair<String, String> pair: strings.keySet()) {
+            //System.out.println(pair.getKey() + pair.getValue() + rowValue );
             if (rowValue.contains(pair.getKey()) || rowValue.contains(pair.getValue())) {
                 return Optional.of(strings.get(pair));
             }
@@ -69,12 +76,15 @@ public final class FixedRowMapper {
     }
 
     private void init() {
+        lecturersKeywords = new HashMap<>();
         for (Lecturer lecturer: this.lecturers
              ) {
-            Pair<String, String> surnameAndShortName = new Pair(lecturer.getSurname(), lecturer.getShortName());
+            Pair<String, String> surnameAndShortName = new Pair<>(lecturer.getSurname(), lecturer.getShortName());
             this.lecturersKeywords.put(surnameAndShortName, lecturer.getId());
+
         }
 
+        classObjectsKeywords = new HashMap<>();
         for (ClassObject classObject: this.classObjects
             ) {
             Pair<String, String> nameAndShortName = new Pair(classObject.getName(), classObject.getShortName());

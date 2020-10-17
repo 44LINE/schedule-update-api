@@ -1,14 +1,9 @@
 package com.github.line.sheduleupdateapi.config;
 
-import com.github.line.sheduleupdateapi.apache.FixedRowMapper;
-import com.github.line.sheduleupdateapi.apache.PreparedClassDetailsFactory;
-import com.github.line.sheduleupdateapi.apache.PreparedGroupedDailyScheduleFactory;
-import com.github.line.sheduleupdateapi.apache.PreparedScheduleFactory;
+import com.github.line.sheduleupdateapi.apache.*;
+import com.github.line.sheduleupdateapi.domain.GroupedDailySchedule;
 import com.github.line.sheduleupdateapi.domain.ScheduleVersion;
-import com.github.line.sheduleupdateapi.repository.ClassObjectRepository;
-import com.github.line.sheduleupdateapi.repository.LecturerRepository;
-import com.github.line.sheduleupdateapi.repository.ScheduleRepository;
-import com.github.line.sheduleupdateapi.repository.ScheduleVersionRepository;
+import com.github.line.sheduleupdateapi.repository.*;
 import com.github.line.sheduleupdateapi.service.*;
 import com.github.line.sheduleupdateapi.utils.UrlInputStreamFetcher;
 import org.springframework.context.annotation.Bean;
@@ -29,6 +24,10 @@ public class BeansConfig {
     @Resource
     public ScheduleVersionRepository scheduleVersionRepository;
     @Resource
+    public GroupedDailyScheduleRepository groupedDailyScheduleRepository;
+    @Resource
+    public ClassDetailsRepository classDetailsRepository;
+    @Resource
     public LecturerRepository lecturerRepository;
     @Resource
     public ClassObjectRepository classObjectRepository;
@@ -41,6 +40,14 @@ public class BeansConfig {
     @Bean
     public ClassObjectService classObjectService() {
         return new ClassObjectService(classObjectRepository);
+    }
+    @Bean
+    public ScheduleVersionService scheduleVersionService() {
+        return new ScheduleVersionService(scheduleVersionRepository);
+    }
+    @Bean
+    public ScheduleService scheduleService() {
+        return new ScheduleService(scheduleRepository, scheduleVersionRepository, groupedDailyScheduleRepository, classDetailsRepository);
     }
 
     //mappers
@@ -65,8 +72,12 @@ public class BeansConfig {
 
     //components
     @Bean
+    public ApacheScheduleUpdateHandler apacheScheduleUpdateHandler() {
+        return new ApacheScheduleUpdateHandler(preparedScheduleFactory());
+    }
+    @Bean
     public ScheduleUpdateListener scheduleUpdateListener() {
-        return new ScheduleUpdateListener(preparedScheduleFactory());
+        return new ScheduleUpdateListener(scheduleService(), scheduleVersionService(), apacheScheduleUpdateHandler());
     };
 
     //services

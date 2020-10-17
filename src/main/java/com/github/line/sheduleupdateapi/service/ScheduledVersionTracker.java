@@ -5,7 +5,6 @@ import com.github.line.sheduleupdateapi.repository.ScheduleVersionRepository;
 import com.github.line.sheduleupdateapi.utils.CustomExtractor;
 import jdk.nashorn.internal.ir.annotations.Immutable;
 
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -36,7 +35,7 @@ public class ScheduledVersionTracker implements Observable{
     }
 
     public void enable() {
-        scheduler.scheduleWithFixedDelay(track, 0, 30, TimeUnit.MINUTES);
+        scheduler.scheduleWithFixedDelay(track, 0, 30, TimeUnit.SECONDS);
     }
 
     void disable() {
@@ -46,7 +45,6 @@ public class ScheduledVersionTracker implements Observable{
     private final Runnable track = new Runnable() {
         public void run() {
             Long count = scheduleVersionRepository.count();
-            System.out.println("runnable");
             if (count == 0L) {
                 notifyObservers();
             } else {

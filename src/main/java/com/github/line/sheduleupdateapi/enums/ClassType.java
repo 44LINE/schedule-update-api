@@ -14,12 +14,16 @@ public enum ClassType {
     public static ClassType retrieveClassType(String rowValue) {
 
         if (rowValue.contains(EXERCISE_CHAR_SEQUENCE_0)) {
+            System.out.println("EXCERCISE");
             return ClassType.EXERCISE;
         } else if (rowValue.contains(FOREIGN_LANGUAGE_CHAR_SEQUENCE_0)) {
+            System.out.println("FOREIGN");
             return ClassType.FOREIGN_LANGUAGE;
         } else if (rowValue.contains(LAB_CHAR_SEQUENCE_0)) {
+            System.out.println("LAB");
             return ClassType.LAB;
         } else {
+            System.out.println("LECTURE");
             return ClassType.LECTURE;
         }
     }

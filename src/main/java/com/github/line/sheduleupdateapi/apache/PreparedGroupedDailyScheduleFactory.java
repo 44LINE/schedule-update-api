@@ -15,6 +15,8 @@ import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Collectors;
 
+import static com.github.line.sheduleupdateapi.apache.CustomFixedIndexes.*;
+
 public class PreparedGroupedDailyScheduleFactory implements PreparedEntityFactory {
     private final PreparedClassDetailsFactory preparedClassDetailsFactory;
 
@@ -28,33 +30,37 @@ public class PreparedGroupedDailyScheduleFactory implements PreparedEntityFactor
 
     @Override
     public Iterable<? extends Entity> create(Collection<?> collection, Entity scheduleReference) {
-        if (!(collection instanceof Map || scheduleReference instanceof Schedule)) {
+        if (!(collection instanceof List || scheduleReference instanceof Schedule)) {
             throw new IllegalArgumentException();
         }
 
-        Map<Integer, List<String>> columnsContent = (Map<Integer, List<String>>) collection;
+        List<List<String>> columnsContent = (List<List<String>>) collection;
         Map<Pair<Integer, LocalDate>, List<String>> splittedColumnsContentByDate = new HashMap<>();
         List<GroupedDailySchedule> groupedDailySchedules = new ArrayList<>();
-        LocalDate dateOfSingleScheduleDay = CustomFixedIndexes.INITIAL_DATE;
+        //todo
 
-        for (Integer groupId: columnsContent.keySet()) {
-            for (Iterator<String> it = columnsContent.get(groupId).iterator(); it.hasNext(); ) {
-                String cellContent = it.next();
-                //kiedy napotka 21 lub 22 w komorce
-                if (cellContent.matches("21") || cellContent.matches("22")) {
-                    Pair<Integer, LocalDate> groupAndDate = new Pair<>(groupId, dateOfSingleScheduleDay);
-                    List<String> dailyClasses = new ArrayList<>();
+        for (List<String> columnContent: columnsContent) {
+            List<String> dailyClasses = new ArrayList<>();
+            int dateIndex = 0;
 
-                    for (int rowId = 0; rowId < 12; rowId++) {
-                        dailyClasses.add(it.next());
-                    }
-
+            for (String rowContent: columnContent) {
+                if (dailyClasses.size() == STATIC_DAILY_ROW_NUMBER) {
+                    Pair<Integer, LocalDate> groupAndDate = new Pair<>(columnsContent.indexOf(columnContent), getDailyScheduleDate(dateIndex++));
                     splittedColumnsContentByDate.put(groupAndDate, dailyClasses);
+                    dailyClasses = new ArrayList<>();
+
+                    if (!(rowContent.matches(DAILY_SCHEDULE_SPLITTER_0) || rowContent.matches(DAILY_SCHEDULE_SPLITTER_1))) {
+                        break;
+                    }
+                } else if (rowContent.matches(DAILY_SCHEDULE_SPLITTER_0) || rowContent.matches(DAILY_SCHEDULE_SPLITTER_1)) {
+                    dailyClasses = new ArrayList<>();
+                } else {
+                    dailyClasses.add(rowContent);
                 }
             }
         }
 
-        for ( Pair<Integer, LocalDate> groupAndDate: splittedColumnsContentByDate.keySet()) {
+        for (Pair<Integer, LocalDate> groupAndDate: splittedColumnsContentByDate.keySet()) {
             Pair<Pair<Integer, LocalDate>, List<String>> mapElement = new Pair<>(groupAndDate, splittedColumnsContentByDate.get(groupAndDate));
             groupedDailySchedules.add((GroupedDailySchedule) create(mapElement, scheduleReference)
                     .orElseThrow(IllegalStateException::new));
@@ -65,12 +71,11 @@ public class PreparedGroupedDailyScheduleFactory implements PreparedEntityFactor
 
     @Override
     public Optional<? extends Entity> create(Object singleDayClasses, Entity scheduleReference) {
-        if (!(singleDayClasses instanceof List || scheduleReference instanceof Schedule)) {
+        if (!(singleDayClasses instanceof Pair || scheduleReference instanceof Schedule)) {
             throw new IllegalArgumentException();
         }
 
         Pair<Pair<Integer, LocalDate>, List<String>> mapElement = (Pair<Pair<Integer, LocalDate>, List<String>>) singleDayClasses;
-        
         GroupedDailySchedule groupedDailySchedule = new GroupedDailySchedule();
         groupedDailySchedule.setId(null);
         groupedDailySchedule.setGroupId(mapElement.getKey().getKey());
