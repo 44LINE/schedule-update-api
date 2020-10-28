@@ -35,7 +35,7 @@ public class ScheduledVersionTracker implements Observable{
     }
 
     public void enable() {
-        scheduler.scheduleWithFixedDelay(track, 5, 30, TimeUnit.SECONDS);
+        scheduler.scheduleWithFixedDelay(track, 30, 30, TimeUnit.SECONDS);
     }
 
     void disable() {
@@ -44,6 +44,7 @@ public class ScheduledVersionTracker implements Observable{
 
     private final Runnable track = new Runnable() {
         public void run() {
+            System.out.println("Tracking run.");
             Long count = scheduleVersionRepository.count();
             if (count == 0L) {
                 notifyObservers();
