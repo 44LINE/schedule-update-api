@@ -14,16 +14,9 @@
     http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
 
-    <!-- Create default configuration for Hibernate -->
     <bean id="hibernateJpaVendorAdapter"
           class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
 
-    <!-- Enable annotation driven transaction management -->
     <tx:annotation-driven/>
-
-    <!--
-      Configure Spring Data JPA and set the base package of the
-      repository interfaces
-    -->
     <jpa:repositories base-package="com.github.line.sheduleupdateapi.repository"/>
 </beans>

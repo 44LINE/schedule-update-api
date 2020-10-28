@@ -19,7 +19,7 @@ public class UrlInputStreamFetcher {
             throw new NullPointerException("Resource cannot be null value.");
         }
 
-        Optional<HttpURLConnection> httpURLConnection = openAndCheckConnection((URL) url);
+        Optional<HttpURLConnection> httpURLConnection = openAndCheckConnection(url);
 
         return (httpURLConnection.isPresent()) ? httpUrlConnectionToInputStream(httpURLConnection.get()) : Optional.empty();
     }

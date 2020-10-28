@@ -9,7 +9,7 @@ public interface EntityType extends Entity, Serializable {
     @Override
     default String name() {
         throw new UnsupportedOperationException();
-    };
+    }
 
     @Override
     default Class<? extends Annotation> annotationType() {

@@ -5,5 +5,5 @@ import com.github.line.sheduleupdateapi.domain.Schedule;
 import java.util.Optional;
 
 public interface ScheduleUpdateHandler {
-    public Optional<Schedule> handle();
+    Optional<Schedule> handle();
 }

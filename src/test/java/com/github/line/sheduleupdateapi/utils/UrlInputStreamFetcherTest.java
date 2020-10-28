@@ -4,31 +4,21 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import sun.misc.IOUtils;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.util.Arrays;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 class UrlInputStreamFetcherTest {
-
     @Test
     public void fetch_urlNull_throwsNullPointerException() {
 
         //then
         Assertions.assertThrows(NullPointerException.class, () -> UrlInputStreamFetcher.fetch(null));
-    }
-
-    @Test
-    public void fetch_urlInstanceNotOk_throwsIllegalArgumentException() {
-
-        //given
-        Object urlInstance = new Object();
-
-        //then
-        Assertions.assertThrows(IllegalArgumentException.class, () -> UrlInputStreamFetcher.fetch((URL) urlInstance));
     }
 
     @Test

@@ -73,7 +73,7 @@ class CustomExtractorTest {
     public void extractLatestUpdateDate_returnsTrue() {
 
         //given
-        String dateToParse = "2020-03-11 20:55";
+        String dateToParse = "2020-10-19 11:28";
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
         //when
@@ -87,7 +87,7 @@ class CustomExtractorTest {
 
     private static URL expectedUrl() {
         try {
-            return new URL("https://it.pk.edu.pl/download/23ee17db23fe77872c03180242895ac6/6_INFORMATYKA%20lato%20rozklad%20NIESTACJONARNE%202019_2020.xls");
+            return new URL("https://it.pk.edu.pl/download/f1e1d9719daf893eb195dfd347664005/19102020_8_INFORMATYKA%20zima%20rozklad%20NIESTACJONARNE%202020_2021.xls");
         } catch (MalformedURLException e) {
             e.printStackTrace();
             return null;

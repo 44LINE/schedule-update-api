@@ -78,7 +78,7 @@ public class BeansConfig {
     @Bean
     public ScheduleUpdateListener scheduleUpdateListener() {
         return new ScheduleUpdateListener(scheduleService(), scheduleVersionService(), apacheScheduleUpdateHandler());
-    };
+    }
 
     //services
     //@Bean

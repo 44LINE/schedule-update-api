@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 //
 public interface PreparedEntityFactory {
-    public Iterable<? extends Entity> create(Collection<? extends Object> collection, Entity selfReference);
+    Iterable<? extends Entity> create(Collection<? extends Object> collection, Entity selfReference);
     //public Iterable<? extends Entity> create(Collection<? extends Object> collection);
-    public Optional<? extends Entity> create(Object argument, Entity selfReference);
+    Optional<? extends Entity> create(Object argument, Entity selfReference);
 }

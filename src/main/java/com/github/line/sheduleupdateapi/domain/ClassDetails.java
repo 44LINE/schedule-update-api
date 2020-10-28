@@ -4,8 +4,6 @@ import com.github.line.sheduleupdateapi.enums.ClassType;
 import com.github.line.sheduleupdateapi.service.EntityType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Type;
-import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

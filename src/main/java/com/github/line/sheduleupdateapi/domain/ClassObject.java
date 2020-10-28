@@ -1,10 +1,6 @@
 package com.github.line.sheduleupdateapi.domain;
 
-import com.github.line.sheduleupdateapi.enums.ClassType;
-import org.hibernate.annotations.Type;
-
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "class_objects", uniqueConstraints = @UniqueConstraint(columnNames = {"id"}))

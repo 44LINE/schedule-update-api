@@ -11,6 +11,6 @@ import java.time.LocalDateTime;
 @Repository("scheduleVersionRepository")
 public interface ScheduleVersionRepository extends JpaRepository<ScheduleVersion, Long> {
 
-    public LocalDateTime getUpdateDateById(Long id);
-    public String getUrlById(Long id);
+    LocalDateTime getUpdateDateById(Long id);
+    String getUrlById(Long id);
 }

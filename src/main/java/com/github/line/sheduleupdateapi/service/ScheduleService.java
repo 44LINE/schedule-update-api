@@ -6,7 +6,6 @@ import com.github.line.sheduleupdateapi.domain.Schedule;
 import com.github.line.sheduleupdateapi.repository.ClassDetailsRepository;
 import com.github.line.sheduleupdateapi.repository.GroupedDailyScheduleRepository;
 import com.github.line.sheduleupdateapi.repository.ScheduleRepository;
-import com.github.line.sheduleupdateapi.repository.ScheduleVersionRepository;
 
 import javax.transaction.Transactional;
 
@@ -29,6 +28,7 @@ public class ScheduleService{
 
     @Transactional
     public void save(Schedule schedule) {
+        scheduleRepository.deprecateLatestSchedule();
         scheduleRepository.save(schedule);
         groupedDailyScheduleRepository.saveAll(schedule.getDailySchedule());
         for (GroupedDailySchedule gr : schedule.getDailySchedule()) {

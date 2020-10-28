@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class PreparedClassDetailsFactory implements PreparedEntityFactory {
-    private AtomicInteger rowIndex = new AtomicInteger(0);
+    private final AtomicInteger rowIndex = new AtomicInteger(0);
     private final FixedRowMapper fixedRowMapper;
 
     private PreparedClassDetailsFactory() {
@@ -50,7 +50,7 @@ public class PreparedClassDetailsFactory implements PreparedEntityFactory {
 
     @Override
     public Optional<ClassDetails> create(Object argument, Entity groupedDailyScheduleReference) {
-        System.out.println("arg" + (String) argument);
+        System.out.println("arg" + argument);
 
         if(argument != null && !((String) argument).isEmpty()) {
 
