@@ -28,7 +28,7 @@ public class ScheduleService{
 
     @Transactional
     public void save(Schedule schedule) {
-        scheduleRepository.deprecateLatestSchedule();
+        //scheduleRepository.deprecateLatestSchedule();
         scheduleRepository.save(schedule);
         groupedDailyScheduleRepository.saveAll(schedule.getDailySchedule());
         for (GroupedDailySchedule gr : schedule.getDailySchedule()) {

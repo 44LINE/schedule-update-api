@@ -35,7 +35,7 @@ public class ScheduledVersionTracker implements Observable{
     }
 
     public void enable() {
-        scheduler.scheduleWithFixedDelay(track, 30, 30, TimeUnit.SECONDS);
+        scheduler.scheduleWithFixedDelay(track, 0, 15, TimeUnit.MINUTES);
     }
 
     void disable() {
@@ -52,7 +52,7 @@ public class ScheduledVersionTracker implements Observable{
                 LocalDateTime extractedDate = CustomExtractor.extractLatestUpdateDate()
                         .orElseThrow(DateExtractionException::new);
 
-                LocalDateTime latestDate = scheduleVersionRepository.getUpdateDateById(count);
+                LocalDateTime latestDate = scheduleVersionRepository.getLatestUpdateDate();
 
                 if (extractedDate.isAfter(latestDate)) {
                     notifyObservers();
