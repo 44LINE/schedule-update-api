@@ -23,11 +23,11 @@ public final class CustomExtractor {
     private final static int DEFAULT_ATTRIBUTE_INDEX = 0;
 
     //download url extraction variables
-    private final static String DOWNLOAD_URL_CSS_QUERY = "div[class=alert alert-light] a[href]";
+    private final static String DOWNLOAD_URL_CSS_QUERY = "div[class=alert readmetxt alert-light] a[href]";
     private final static String DOWNLOAD_URL_ATTRIBUTE_KEY = "href";
 
     //latest update date extraction variables
-    private final static String LATEST_UPDATE_DATE_CSS_QUERY = "div[class=alert alert-light] div[class=text-right sign]";
+    private final static String LATEST_UPDATE_DATE_CSS_QUERY = "div[class=alert readmetxt alert-light] div[class=text-right sign]";
     private final static String LATEST_UPDATE_DATE_ATTRIBUTE_KEY = "text";
     private final static DateTimeFormatter LATEST_UPDATE_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
@@ -67,7 +67,8 @@ public final class CustomExtractor {
         if (returnedText.isPresent()) {
             //working with string
             String dateToParse = returnedText.get().split(", ", 0)[1];
-            return Optional.of(LocalDateTime.parse(dateToParse.substring(0, dateToParse.length() -1), LATEST_UPDATE_DATE_FORMATTER));
+            dateToParse = dateToParse.replace("]", "");
+            return Optional.of(LocalDateTime.parse(dateToParse, LATEST_UPDATE_DATE_FORMATTER));
         } else {
             return Optional.empty();
         }

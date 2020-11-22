@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 public class ScheduledVersionTracker implements Observable{
 
     private final List<Observer> observers;
-    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(4);
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private final ScheduleVersionRepository scheduleVersionRepository;
 
     private ScheduledVersionTracker() {
