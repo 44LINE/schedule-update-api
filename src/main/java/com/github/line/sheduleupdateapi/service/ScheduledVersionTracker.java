@@ -3,7 +3,6 @@ package com.github.line.sheduleupdateapi.service;
 import com.github.line.sheduleupdateapi.exceptions.DateExtractionException;
 import com.github.line.sheduleupdateapi.repository.ScheduleVersionRepository;
 import com.github.line.sheduleupdateapi.utils.CustomExtractor;
-import jdk.nashorn.internal.ir.annotations.Immutable;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -11,7 +10,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-@Immutable
 public class ScheduledVersionTracker implements Observable{
 
     private final List<Observer> observers;
@@ -49,10 +47,13 @@ public class ScheduledVersionTracker implements Observable{
             if (count == 0L) {
                 notifyObservers();
             } else {
+                System.out.println("Count: " + count);
                 LocalDateTime extractedDate = CustomExtractor.extractLatestUpdateDate()
                         .orElseThrow(DateExtractionException::new);
+                System.out.println("Date: " + extractedDate);
 
                 LocalDateTime latestDate = scheduleVersionRepository.getLatestUpdateDate();
+                System.out.println("Date from db: " + latestDate);
 
                 if (extractedDate.isAfter(latestDate)) {
                     notifyObservers();

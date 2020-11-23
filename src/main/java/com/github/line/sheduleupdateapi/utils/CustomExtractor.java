@@ -1,6 +1,5 @@
 package com.github.line.sheduleupdateapi.utils;
 
-import jdk.nashorn.internal.ir.annotations.Immutable;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -15,7 +14,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.Optional;
 
 // class fetches data from html document
-@Immutable
 public final class CustomExtractor {
 
     //class variables

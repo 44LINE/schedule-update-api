@@ -1,17 +1,12 @@
 package com.github.line.sheduleupdateapi.apache;
 
-import javafx.util.Pair;
+import com.github.line.sheduleupdateapi.utils.Pair;
 import org.apache.poi.ss.usermodel.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static org.apache.poi.ss.usermodel.CellType.*;
-import static org.apache.poi.ss.usermodel.CellType.NUMERIC;
 
 public final class WorkbookHelper {
     private WorkbookHelper() {

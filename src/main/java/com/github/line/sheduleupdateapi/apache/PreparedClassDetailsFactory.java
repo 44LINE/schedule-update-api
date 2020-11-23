@@ -4,14 +4,13 @@ import com.github.line.sheduleupdateapi.domain.*;
 import com.github.line.sheduleupdateapi.enums.ClassType;
 import com.github.line.sheduleupdateapi.enums.DayTimePeriods;
 import com.github.line.sheduleupdateapi.service.PreparedEntityFactory;
-import javafx.util.Pair;
+import com.github.line.sheduleupdateapi.utils.Pair;
 
 import javax.persistence.Entity;
-import java.time.LocalDate;
 import java.util.*;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
+
+;
 
 public class PreparedClassDetailsFactory implements PreparedEntityFactory {
     private final AtomicInteger rowIndex = new AtomicInteger(0);

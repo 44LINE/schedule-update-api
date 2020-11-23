@@ -1,11 +1,10 @@
 package com.github.line.sheduleupdateapi.apache;
 
-import com.fasterxml.jackson.core.JsonToken;
 import com.github.line.sheduleupdateapi.domain.ClassObject;
 import com.github.line.sheduleupdateapi.domain.Lecturer;
 import com.github.line.sheduleupdateapi.service.ClassObjectService;
 import com.github.line.sheduleupdateapi.service.LecturerService;
-import javafx.util.Pair;
+import com.github.line.sheduleupdateapi.utils.Pair;
 
 import java.util.*;
 

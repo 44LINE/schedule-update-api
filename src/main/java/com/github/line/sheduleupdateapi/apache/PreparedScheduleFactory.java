@@ -6,7 +6,7 @@ import com.github.line.sheduleupdateapi.domain.ScheduleVersion;
 import com.github.line.sheduleupdateapi.service.PreparedEntityFactory;
 import com.github.line.sheduleupdateapi.utils.TemporaryFile;
 import com.github.line.sheduleupdateapi.utils.UrlInputStreamFetcher;
-import javafx.util.Pair;
+import com.github.line.sheduleupdateapi.utils.Pair;
 import org.apache.poi.ss.usermodel.Sheet;
 
 import javax.persistence.Entity;

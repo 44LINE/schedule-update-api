@@ -4,16 +4,11 @@ import com.github.line.sheduleupdateapi.domain.ClassDetails;
 import com.github.line.sheduleupdateapi.domain.GroupedDailySchedule;
 import com.github.line.sheduleupdateapi.domain.Schedule;
 import com.github.line.sheduleupdateapi.service.PreparedEntityFactory;
-import javafx.util.Pair;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.tomcat.jni.Local;
+import com.github.line.sheduleupdateapi.utils.Pair;
 
 import javax.persistence.Entity;
 import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.*;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.stream.Collectors;
 
 import static com.github.line.sheduleupdateapi.apache.CustomFixedIndexes.*;
 
