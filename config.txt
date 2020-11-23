@@ -1,3 +1,0 @@
-JDBC_DATABASE_PASSWORD=w1vuptvc8hfeimiq
-JDBC_DATABASE_URL='jdbc:postgresql://db-postgresql-fra1-52659-do-user-7863640-0.b.db.ondigitalocean.com:25060/ScheduleDB'
-JDBC_DATABASE_USERNAME=doadmin
