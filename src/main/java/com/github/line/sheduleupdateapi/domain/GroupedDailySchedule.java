@@ -1,6 +1,5 @@
 package com.github.line.sheduleupdateapi.domain;
 
-import com.github.line.sheduleupdateapi.service.EntityType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -9,11 +8,10 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "grouped_daily_schedules", uniqueConstraints = @UniqueConstraint(columnNames = {"id"}))
-public class GroupedDailySchedule implements EntityType {
+public class GroupedDailySchedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

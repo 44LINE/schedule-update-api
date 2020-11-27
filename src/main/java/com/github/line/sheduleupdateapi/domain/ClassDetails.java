@@ -1,7 +1,6 @@
 package com.github.line.sheduleupdateapi.domain;
 
 import com.github.line.sheduleupdateapi.enums.ClassType;
-import com.github.line.sheduleupdateapi.service.EntityType;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
@@ -10,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "class_details", uniqueConstraints = @UniqueConstraint(columnNames = {"id"}))
-public class ClassDetails implements EntityType {
+public class ClassDetails{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

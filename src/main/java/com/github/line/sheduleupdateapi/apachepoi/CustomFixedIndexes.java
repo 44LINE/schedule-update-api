@@ -1,4 +1,4 @@
-package com.github.line.sheduleupdateapi.apache;
+package com.github.line.sheduleupdateapi.apachepoi;
 
 import java.time.LocalDate;
 

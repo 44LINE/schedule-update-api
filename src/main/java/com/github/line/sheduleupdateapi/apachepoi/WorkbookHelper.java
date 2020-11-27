@@ -1,4 +1,4 @@
-package com.github.line.sheduleupdateapi.apache;
+package com.github.line.sheduleupdateapi.apachepoi;
 
 import com.github.line.sheduleupdateapi.utils.Pair;
 import org.apache.poi.ss.usermodel.*;
@@ -6,9 +6,12 @@ import org.apache.poi.ss.usermodel.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public final class WorkbookHelper {
+    private static Logger logger = Logger.getLogger(WorkbookHelper.class.getName());
+
     private WorkbookHelper() {
         throw new AssertionError();
     }

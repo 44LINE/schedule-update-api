@@ -1,22 +1,20 @@
 package com.github.line.sheduleupdateapi.service;
 
 import com.github.line.sheduleupdateapi.domain.Schedule;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.transaction.Transactional;
 
+@Component
 public class ScheduleUpdateListener implements Observer{
-
     private final ScheduleService scheduleService;
     private final ScheduleVersionService scheduleVersionService;
     private final ScheduleUpdateHandler scheduleUpdateHandler;
 
-    private ScheduleUpdateListener() {
-        throw new AssertionError();
-    }
-
-    public ScheduleUpdateListener(ScheduleService scheduleService,
-                                  ScheduleVersionService scheduleVersionService,
-                                  ScheduleUpdateHandler scheduleUpdateHandler) {
+    public ScheduleUpdateListener(@Autowired ScheduleService scheduleService,
+                                  @Autowired ScheduleVersionService scheduleVersionService,
+                                  @Autowired ScheduleUpdateHandler scheduleUpdateHandler) {
         this.scheduleService = scheduleService;
         this.scheduleVersionService = scheduleVersionService;
         this.scheduleUpdateHandler = scheduleUpdateHandler;
@@ -27,7 +25,7 @@ public class ScheduleUpdateListener implements Observer{
     public void update() {
         Schedule handle = scheduleUpdateHandler.handle()
                 .orElseThrow(UnknownError::new);
-        scheduleService.save(handle);
+        //scheduleService.save(handle);
     }
 
 

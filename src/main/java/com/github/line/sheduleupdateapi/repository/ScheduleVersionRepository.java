@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 
-@Repository("scheduleVersionRepository")
+@Repository
 public interface ScheduleVersionRepository extends JpaRepository<ScheduleVersion, Long> {
 
     LocalDateTime getUpdateDateById(Long id);

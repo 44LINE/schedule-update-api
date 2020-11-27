@@ -1,13 +1,16 @@
-package com.github.line.sheduleupdateapi.apache;
+package com.github.line.sheduleupdateapi.apachepoi;
 
 import com.github.line.sheduleupdateapi.domain.ClassObject;
 import com.github.line.sheduleupdateapi.domain.Lecturer;
 import com.github.line.sheduleupdateapi.service.ClassObjectService;
 import com.github.line.sheduleupdateapi.service.LecturerService;
 import com.github.line.sheduleupdateapi.utils.Pair;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.*;
 
+@Component
 public final class FixedRowMapper {
     private final List<Lecturer> lecturers;
     private final List<ClassObject> classObjects;
@@ -15,11 +18,7 @@ public final class FixedRowMapper {
     private Map<Pair<String, String>, Long> lecturersKeywords;
     private Map<Pair<String, String>, Long> classObjectsKeywords;
 
-    private FixedRowMapper() {
-        throw new AssertionError();
-    }
-
-    public FixedRowMapper(LecturerService lecturerService, ClassObjectService classObjectService) {
+    public FixedRowMapper(@Autowired LecturerService lecturerService, @Autowired ClassObjectService classObjectService) {
         this.lecturers = lecturerService.getAll();
         this.classObjects = classObjectService.getAll();
         init();

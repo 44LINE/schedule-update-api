@@ -6,21 +6,20 @@ import com.github.line.sheduleupdateapi.domain.Schedule;
 import com.github.line.sheduleupdateapi.repository.ClassDetailsRepository;
 import com.github.line.sheduleupdateapi.repository.GroupedDailyScheduleRepository;
 import com.github.line.sheduleupdateapi.repository.ScheduleRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
+@Service
 public class ScheduleService{
     private final ScheduleRepository scheduleRepository;
     private final GroupedDailyScheduleRepository groupedDailyScheduleRepository;
     private final ClassDetailsRepository classDetailsRepository;
 
-    private ScheduleService() {
-        throw new AssertionError();
-    }
-
-    public ScheduleService(ScheduleRepository scheduleRepository,
-                           GroupedDailyScheduleRepository groupedDailyScheduleRepository,
-                           ClassDetailsRepository classDetailsRepository) {
+    public ScheduleService(@Autowired ScheduleRepository scheduleRepository,
+                           @Autowired GroupedDailyScheduleRepository groupedDailyScheduleRepository,
+                           @Autowired ClassDetailsRepository classDetailsRepository) {
         this.scheduleRepository = scheduleRepository;
         this.groupedDailyScheduleRepository = groupedDailyScheduleRepository;
         this.classDetailsRepository = classDetailsRepository;

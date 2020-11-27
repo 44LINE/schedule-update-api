@@ -3,6 +3,8 @@ package com.github.line.sheduleupdateapi.service;
 import com.github.line.sheduleupdateapi.exceptions.DateExtractionException;
 import com.github.line.sheduleupdateapi.repository.ScheduleVersionRepository;
 import com.github.line.sheduleupdateapi.utils.CustomExtractor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,17 +12,14 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+@Component
 public class ScheduledVersionTracker implements Observable{
 
     private final List<Observer> observers;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private final ScheduleVersionRepository scheduleVersionRepository;
 
-    private ScheduledVersionTracker() {
-        throw new AssertionError();
-    }
-
-    public ScheduledVersionTracker(List<Observer> observers, ScheduleVersionRepository scheduleVersionRepository) {
+    public ScheduledVersionTracker(@Autowired List<Observer> observers, @Autowired ScheduleVersionRepository scheduleVersionRepository) {
         this.observers = observers;
         this.scheduleVersionRepository = scheduleVersionRepository;
     }
@@ -55,9 +54,9 @@ public class ScheduledVersionTracker implements Observable{
                 LocalDateTime latestDate = scheduleVersionRepository.getLatestUpdateDate();
                 System.out.println("Date from db: " + latestDate);
 
-                if (extractedDate.isAfter(latestDate)) {
+                //if (extractedDate.isAfter(latestDate)) {
                     notifyObservers();
-                }
+                //}
             }
         }
     };
