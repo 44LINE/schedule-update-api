@@ -12,9 +12,11 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 // class fetches data from html document
 public final class CustomExtractor {
+    private static final Logger logger = Logger.getLogger(CustomExtractor.class.getName());
 
     //class variables
     private final static String SOURCE_URL = "https://it.pk.edu.pl/?page=rz";

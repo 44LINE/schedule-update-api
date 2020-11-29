@@ -1,58 +1,71 @@
 package com.github.line.sheduleupdateapi.apachepoi;
 
+import com.github.line.sheduleupdateapi.apachepoi.container.SingleDayClasses;
 import com.github.line.sheduleupdateapi.domain.GroupedDailySchedule;
 import com.github.line.sheduleupdateapi.domain.Schedule;
 import com.github.line.sheduleupdateapi.service.EntityCollectionFactory;
 import com.github.line.sheduleupdateapi.service.EntityFactory;
-import com.github.line.sheduleupdateapi.utils.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import static com.github.line.sheduleupdateapi.apachepoi.CustomFixedIndexes.*;
-import static com.github.line.sheduleupdateapi.apachepoi.CustomFixedIndexes.DAILY_SCHEDULE_SPLITTER_1;
 
 @Component
 public class GroupedDailyScheduleCollectionFactory implements EntityCollectionFactory<GroupedDailySchedule, Schedule, List<String>> {
-    private final EntityFactory<GroupedDailySchedule, Schedule, Pair<Pair<Integer, LocalDate>, List<String>>> factory;
+    private final EntityFactory<GroupedDailySchedule, Schedule, SingleDayClasses> factory;
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
 
-    public GroupedDailyScheduleCollectionFactory(@Autowired EntityFactory<GroupedDailySchedule, Schedule, Pair<Pair<Integer, LocalDate>, List<String>>> factory) {
+    public GroupedDailyScheduleCollectionFactory(@Autowired EntityFactory<GroupedDailySchedule, Schedule, SingleDayClasses> factory) {
         this.factory = factory;
     }
 
     @Override
-    public List<GroupedDailySchedule> createCollection(Schedule schedule, List<List<String>> collection) {
-        Map<Pair<Integer, LocalDate>, List<String>> splittedColumnsContentByDate = new HashMap<>();
-        List<GroupedDailySchedule> groupedDailySchedules = new ArrayList<>();
+    public List<GroupedDailySchedule> createCollection(Schedule schedule, List<List<String>> columnsContent) {
+        return splitByGroupAndDate(columnsContent).stream()
+                                           .map(singleDayClasses -> {
+                                               return factory.create(schedule, singleDayClasses).get();
+                                           })
+                                           .collect(Collectors.toList());
+    }
 
-        for (List<String> columnContent: collection) {
-            List<String> dailyClasses = new ArrayList<>();
+    private ConcurrentLinkedQueue<SingleDayClasses> splitByGroupAndDate(List<List<String>> columnsContent) {
+        ConcurrentLinkedQueue<SingleDayClasses> queue = new ConcurrentLinkedQueue<>();
+        List<String> singleDayContent = new ArrayList<>();
+
+        for (int i = 0; i < columnsContent.size(); i++) {
             int dateIndex = 0;
 
-            for (String rowContent: columnContent) {
-                if (dailyClasses.size() == STATIC_DAILY_ROW_NUMBER) {
-                    Pair<Integer, LocalDate> groupAndDate = new Pair<>(collection.indexOf(columnContent), getDailyScheduleDate(dateIndex++));
-                    splittedColumnsContentByDate.put(groupAndDate, dailyClasses);
-                    dailyClasses = new ArrayList<>();
-
-                    if (!(rowContent.matches(DAILY_SCHEDULE_SPLITTER_0) || rowContent.matches(DAILY_SCHEDULE_SPLITTER_1))) {
+            //logger.info("Group: " + i);
+            for (int j = 0; j < columnsContent.get(i).size(); j++) {
+                String singleCellContent = columnsContent.get(i).get(j);
+                //logger.info("Row index: " + j + " Content: " + singleCellContent);
+                //logger.info("List size: " + singleDayContent.size());
+                if (singleDayContent.size() == STATIC_DAILY_ROW_NUMBER) {
+                    SingleDayClasses singleDayClasses = new SingleDayClasses(i, getDailyScheduleDate(dateIndex++), singleDayContent);
+                    queue.add(singleDayClasses);
+                    singleDayContent = new ArrayList<>();
+                    if (!isCellSplitter(singleCellContent)) {
                         break;
                     }
-                } else if (rowContent.matches(DAILY_SCHEDULE_SPLITTER_0) || rowContent.matches(DAILY_SCHEDULE_SPLITTER_1)) {
-                    dailyClasses = new ArrayList<>();
+                } else if (isCellSplitter(singleCellContent)) {
+                    singleDayContent = new ArrayList<>();
                 } else {
-                    dailyClasses.add(rowContent);
+                    singleDayContent.add(singleCellContent);
                 }
             }
         }
+        return queue;
+    }
 
-        for (Pair<Integer, LocalDate> groupAndDate: splittedColumnsContentByDate.keySet()) {
-            Pair<Pair<Integer, LocalDate>, List<String>> mapElement = new Pair<>(groupAndDate, splittedColumnsContentByDate.get(groupAndDate));
-            groupedDailySchedules.add(factory.create(schedule, mapElement).get());
-        }
-
-        return groupedDailySchedules;
+    private boolean isCellSplitter(String rowContent) {
+        return rowContent.matches(DAILY_SCHEDULE_SPLITTER_0) || rowContent.matches(DAILY_SCHEDULE_SPLITTER_1);
     }
 }
+
+

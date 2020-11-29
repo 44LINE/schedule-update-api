@@ -27,7 +27,6 @@ public final class FixedRowMapper {
 
     //less-code solution
     public Optional<Pair<Lecturer, ClassObject>> mapToLecturerAndClassObjectPair(String rowValue) {
-        System.out.println("mapping: " +rowValue);
         for (Lecturer lecturer: lecturers
              ) {
             if (rowValue.contains(lecturer.getSurname()) || rowValue.contains(lecturer.getShortName())) {
@@ -37,7 +36,6 @@ public final class FixedRowMapper {
                 ) {
                     if (rowValue.contains(classObject.getName()) || rowValue.contains(classObject.getShortName())) {
                         Optional<ClassObject> matchingClassObject = Optional.of(classObject);
-                        System.out.println("result of mapping: " + matchingClassObject.get().getName());
                         return Optional.of(new Pair<>(matchingLecturer.get(), matchingClassObject.get()));
                     }
                 }
@@ -65,7 +63,6 @@ public final class FixedRowMapper {
     private Optional<Long> contains(Map<Pair<String, String>, Long> strings, String rowValue) {
         strings.size();
         for (Pair<String, String> pair: strings.keySet()) {
-            //System.out.println(pair.getKey() + pair.getValue() + rowValue );
             if (rowValue.contains(pair.getKey()) || rowValue.contains(pair.getValue())) {
                 return Optional.of(strings.get(pair));
             }

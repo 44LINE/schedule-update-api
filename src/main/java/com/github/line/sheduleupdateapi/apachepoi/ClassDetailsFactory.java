@@ -9,9 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Component
 public class ClassDetailsFactory implements EntityFactory<ClassDetails, GroupedDailySchedule, Pair<Integer, String>> {
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
     private final FixedRowMapper fixedRowMapper;
 
     public ClassDetailsFactory(@Autowired FixedRowMapper fixedRowMapper) {
@@ -20,15 +22,11 @@ public class ClassDetailsFactory implements EntityFactory<ClassDetails, GroupedD
 
     @Override
     public Optional<ClassDetails> create(GroupedDailySchedule groupedDailySchedule, Pair<Integer, String> argument) {
-        System.out.println("arg" + argument);
-
         if(!argument.getValue().isEmpty()) {
-
-            DayTimePeriods dayTimePeriod = DayTimePeriods.retrieveDayTimePeriod(argument.getKey());
+            DayTimePeriods dayTimePeriod = DayTimePeriods.retrieveDayTimePeriodSwitch(argument.getKey());
             ClassPeriod classPeriod = new ClassPeriod(dayTimePeriod);
+            //logger.info("Index: " + argument.getKey() + " Value: " + argument.getValue());
             Optional<Pair<Lecturer, ClassObject>> pair = fixedRowMapper.mapToLecturerAndClassObjectPair(argument.getValue());
-            System.out.println("dtp" + dayTimePeriod.toString() + " lecturer: " + pair.get().getKey().getSurname() + " co: " + pair.get().getValue().getName());
-
             if (pair.isPresent()) {
                 return Optional.of(new ClassDetails(
                         null,

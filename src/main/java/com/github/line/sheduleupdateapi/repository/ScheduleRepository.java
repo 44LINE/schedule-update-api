@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
-    @Query("UPDATE Schedule AS s SET s.isLatest = false WHERE s.isLatest = true")
+    @Query("UPDATE Schedule AS s SET s.isLatest = false")
     void deprecateLatestSchedule();
 }

@@ -23,19 +23,19 @@ public enum DayTimePeriods {
 
         switch (i) {
             case 0: case 1: case 2: {
-                logger.info("retrieved " + MORNING + " from: "  + i);
+                //logger.info("retrieved " + MORNING + " from: "  + i);
                 return DayTimePeriods.MORNING;
             }
             case 3: case 4: case 5: {
-                logger.info("retrieved " + MIDDAY + " from: "  + i);
+                //logger.info("retrieved " + MIDDAY + " from: "  + i);
                 return DayTimePeriods.MIDDAY;
             }
             case 6: case 7: case 8: {
-                logger.info("retrieved " + AFTERNOON + " from: "  + i);
+                //logger.info("retrieved " + AFTERNOON + " from: "  + i);
                 return DayTimePeriods.AFTERNOON;
             }
             case 9: case 10: case 11: {
-                logger.info("retrieved " + EVENING + " from: "  + i);
+                //logger.info("retrieved " + EVENING + " from: "  + i);
                 return DayTimePeriods.EVENING;
             }
             default: {

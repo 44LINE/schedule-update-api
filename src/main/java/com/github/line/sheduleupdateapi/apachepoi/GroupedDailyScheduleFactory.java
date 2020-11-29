@@ -1,35 +1,34 @@
 package com.github.line.sheduleupdateapi.apachepoi;
 
+import com.github.line.sheduleupdateapi.apachepoi.container.SingleDayClasses;
 import com.github.line.sheduleupdateapi.domain.ClassDetails;
 import com.github.line.sheduleupdateapi.domain.GroupedDailySchedule;
 import com.github.line.sheduleupdateapi.domain.Schedule;
 import com.github.line.sheduleupdateapi.service.EntityCollectionFactory;
 import com.github.line.sheduleupdateapi.service.EntityFactory;
-import com.github.line.sheduleupdateapi.utils.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Component
-public class GroupDailyScheduleFactory implements EntityFactory<GroupedDailySchedule, Schedule, Pair<Pair<Integer, LocalDate>, List<String>>> {
+public class GroupedDailyScheduleFactory implements EntityFactory<GroupedDailySchedule, Schedule, SingleDayClasses> {
     private final EntityCollectionFactory<ClassDetails, GroupedDailySchedule, String> factory;
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
 
-    public GroupDailyScheduleFactory(@Autowired EntityCollectionFactory<ClassDetails, GroupedDailySchedule, String> factory) {
+    public GroupedDailyScheduleFactory(@Autowired EntityCollectionFactory<ClassDetails, GroupedDailySchedule, String> factory) {
         this.factory = factory;
     }
 
     @Override
-    public Optional<GroupedDailySchedule> create(Schedule schedule, Pair<Pair<Integer, LocalDate>, List<String>> singleDayClasses) {
+    public Optional<GroupedDailySchedule> create(Schedule schedule, SingleDayClasses singleDayClasses) {
         GroupedDailySchedule groupedDailySchedule = new GroupedDailySchedule();
         groupedDailySchedule.setId(null);
-        groupedDailySchedule.setGroupId(singleDayClasses.getKey().getKey());
-        groupedDailySchedule.setDate(singleDayClasses.getKey().getValue());
+        groupedDailySchedule.setGroupId(singleDayClasses.getGroupId());
+        groupedDailySchedule.setDate(singleDayClasses.getDate());
         groupedDailySchedule.setSchedule(schedule);
-        groupedDailySchedule.setClassDetails(factory.createCollection(groupedDailySchedule, singleDayClasses.getValue()));
-
+        groupedDailySchedule.setClassDetails(factory.createCollection(groupedDailySchedule, singleDayClasses.getContent()));
         return Optional.of(groupedDailySchedule);
     }
 }

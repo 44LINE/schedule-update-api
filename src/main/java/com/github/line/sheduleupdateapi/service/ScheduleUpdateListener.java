@@ -25,7 +25,7 @@ public class ScheduleUpdateListener implements Observer{
     public void update() {
         Schedule handle = scheduleUpdateHandler.handle()
                 .orElseThrow(UnknownError::new);
-        //scheduleService.save(handle);
+        scheduleService.save(handle);
     }
 
 

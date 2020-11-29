@@ -56,6 +56,10 @@ class CustomFixedIndexes {
     }
 
     public static LocalDate getDailyScheduleDate(int index) {
-        return DAILY_SCHEDULE_DATE[index];
+        if (index >=  DAILY_SCHEDULE_DATE.length) {
+            return null;
+        } else {
+            return DAILY_SCHEDULE_DATE[index];
+        }
     }
 }

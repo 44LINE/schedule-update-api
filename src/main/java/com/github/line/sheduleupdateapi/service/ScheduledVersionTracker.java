@@ -11,10 +11,11 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Logger;
 
 @Component
 public class ScheduledVersionTracker implements Observable{
-
+    private final Logger logger = Logger.getLogger(this.getClass().getName());
     private final List<Observer> observers;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private final ScheduleVersionRepository scheduleVersionRepository;
@@ -41,22 +42,22 @@ public class ScheduledVersionTracker implements Observable{
 
     private final Runnable track = new Runnable() {
         public void run() {
-            System.out.println("Tracking run.");
+            logger.info("Tracking run.");
             Long count = scheduleVersionRepository.count();
             if (count == 0L) {
                 notifyObservers();
             } else {
-                System.out.println("Count: " + count);
+                logger.info("Versions amount: " + count);
                 LocalDateTime extractedDate = CustomExtractor.extractLatestUpdateDate()
                         .orElseThrow(DateExtractionException::new);
-                System.out.println("Date: " + extractedDate);
+                logger.info("Date from source: " + extractedDate);
 
                 LocalDateTime latestDate = scheduleVersionRepository.getLatestUpdateDate();
-                System.out.println("Date from db: " + latestDate);
+                logger.info("Latest version update date: " + latestDate);
 
-                //if (extractedDate.isAfter(latestDate)) {
+                if (extractedDate.isAfter(latestDate)) {
                     notifyObservers();
-                //}
+                }
             }
         }
     };

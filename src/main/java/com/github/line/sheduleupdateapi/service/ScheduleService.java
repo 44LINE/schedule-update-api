@@ -31,10 +31,8 @@ public class ScheduleService{
         scheduleRepository.save(schedule);
         groupedDailyScheduleRepository.saveAll(schedule.getDailySchedule());
         for (GroupedDailySchedule gr : schedule.getDailySchedule()) {
-            for (ClassDetails cd :
-                    gr.getClassDetails()) {
-                System.out.println(cd.toString());
-            classDetailsRepository.saveAll(gr.getClassDetails());
+            for (ClassDetails cd : gr.getClassDetails()) {
+                classDetailsRepository.saveAll(gr.getClassDetails());
             }
         }
     }

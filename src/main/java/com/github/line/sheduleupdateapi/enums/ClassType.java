@@ -28,7 +28,7 @@ public enum ClassType {
             classType = ClassType.LECTURE;
         }
 
-        logger.info("retrieved " + classType.name() + " from: "  + rowValue);
+        //logger.info("retrieved " + classType.name() + " from: "  + rowValue);
         return classType;
     }
 }

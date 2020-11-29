@@ -1,22 +1,25 @@
 package com.github.line.sheduleupdateapi.apachepoi;
 
-import com.github.line.sheduleupdateapi.utils.Pair;
+import com.github.line.sheduleupdateapi.apachepoi.container.MergedCell;
+import com.github.line.sheduleupdateapi.apachepoi.container.SheetContentHolder;
 import org.apache.poi.ss.usermodel.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public final class WorkbookHelper {
-    private static Logger logger = Logger.getLogger(WorkbookHelper.class.getName());
-
+    private static final Logger logger = Logger.getLogger(WorkbookHelper.class.getName());
     private WorkbookHelper() {
         throw new AssertionError();
     }
 
-    //works
     public static Optional<Sheet> getSheetFromXlsFile(File file, int sheetIndex) {
         try {
             Workbook workbook = WorkbookFactory.create(file);
@@ -28,84 +31,63 @@ public final class WorkbookHelper {
         }
     }
 
-    //works
     public static List<Cell> getColumnFromSheet(Sheet sheet, int columnIndex) {
         List<Cell> column = new ArrayList<>();
-
         for (Row row: sheet) {
             column.add(row.getCell(columnIndex));
         }
-
         return column;
     }
 
-    //works
     public static List<String> getCellContent(List<Cell> cells) {
         DataFormatter df = new DataFormatter();
-        List<String> cellContent = new ArrayList<>();
-
-        for (Cell cell: cells) {
-            cellContent.add(df.formatCellValue(cell));
-        }
-
-        return cellContent;
+        return cells.stream()
+                    .map(df::formatCellValue)
+                    .collect(Collectors.toList());
     }
 
-    public static Map<Integer, Pair<Integer, Integer>> getAddressAndRangeMergedCellsInColumn(Sheet sheet, int columnIndex) {
+    public static Queue<MergedCell> getAddressAndRangeMergedCellsInColumn(Sheet sheet, int columnIndex) {
         return sheet.getMergedRegions().stream()
                 .filter(cellAddress ->
                         columnIndex == cellAddress.getFirstColumn())
-                .collect(Collectors.toMap(
-                        cellAddress -> cellAddress.getFirstRow(),
-                        cellAddress -> new Pair<>(cellAddress.getLastRow() - cellAddress.getFirstRow() + 1,
-                                cellAddress.getLastColumn() - cellAddress.getFirstColumn() + 1)
-                ));
+                .map(cellAddress -> {
+                    return new MergedCell(cellAddress.getFirstRow(),
+                            cellAddress.getLastColumn() - cellAddress.getFirstColumn() + 1,
+                            cellAddress.getLastRow() - cellAddress.getFirstRow() + 1); })
+                .collect(Collectors.toCollection(ConcurrentLinkedQueue::new));
     }
 
-    public static List<List<String>> splitMergedCells( List<Pair<Map<Integer, Pair<Integer, Integer>>, List<String>>>  addressRangeContent) {
-        //groups extraction.
-            //  <<row index, <length, width>>, <cells content from single column>>
-            Pair<Map<Integer, Pair<Integer, Integer>>, List<String>> group1 = addressRangeContent.get(0);
-            Pair<Map<Integer, Pair<Integer, Integer>>, List<String>> group2 = addressRangeContent.get(1);
-            Pair<Map<Integer, Pair<Integer, Integer>>, List<String>> group3 = addressRangeContent.get(2);
-            Pair<Map<Integer, Pair<Integer, Integer>>, List<String>> group4 = addressRangeContent.get(3);
-
-        //splitting values between lists (1 column)
-        for (Integer rowIndex: group1.getKey().keySet()) {
-            int length = group1.getKey().get(rowIndex).getKey();
-            if(length > 0) {
-                int width = group1.getKey().get(rowIndex).getValue();
-                String cellContent = group1.getValue().get(rowIndex);
-
-                if (width == 4) {
-                    group2.getValue().set(rowIndex, cellContent);
-                    group3.getValue().set(rowIndex, cellContent);
-                    group4.getValue().set(rowIndex, cellContent);
-                } else if (width == 2) {
-                    group2.getValue().set(rowIndex, cellContent);
+    public static List<List<String>> splitMergedCells(SheetContentHolder content) {
+        content.getMergedCellsInColumn(0).stream().forEach(
+                mergedCell -> {
+                    //logger.info("Length: " + String.valueOf(mergedCell.getLength()));
+                    if (mergedCell.getLength() > 0) {
+                        int width = mergedCell.getWidth();
+                        int rowId = mergedCell.getRowIndex();
+                        String cellContent = content.getColumnCellContent(0).get(rowId);
+                        //logger.info("Width: " + width + " RowId: " + rowId + " Content: " + cellContent);
+                        if (width == 4) {
+                            content.setCellContent(1, rowId, cellContent);
+                            content.setCellContent(2, rowId, cellContent);
+                            content.setCellContent(3, rowId, cellContent);
+                        } else if (width == 2) {
+                            content.setCellContent(1, rowId, cellContent);
+                        }
+                    }
                 }
-            }
-        }
+        );
 
-        //splitting values between lists (3 column)
-        for (Integer rowIndex: group3.getKey().keySet()) {
-            int length = group3.getKey().get(rowIndex).getKey();
-            if(length > 0) {
-                int width = group3.getKey().get(rowIndex).getValue();
-                String cellContent = group3.getValue().get(rowIndex);
-
-                if (width == 2) {
-                    group4.getValue().set(rowIndex, cellContent);
+        content.getMergedCellsInColumn(2).stream().forEach(
+                mergedCell -> {
+                    if (mergedCell.getLength() > 0) {
+                        int rowId = mergedCell.getRowIndex();
+                        if (mergedCell.getWidth() == 2) {
+                            content.setCellContent(3, rowId, content.getColumnCellContent(2).get(rowId));
+                        }
+                    }
                 }
-            }
-        }
-
-        List<List<String>> splittedCellsContent = new ArrayList<>();
-        splittedCellsContent.add(group1.getValue());
-        splittedCellsContent.add(group2.getValue());
-        splittedCellsContent.add(group3.getValue());
-        splittedCellsContent.add(group4.getValue());
-
-        return Collections.unmodifiableList(splittedCellsContent);
+        );
+        return content.getColumnsContentCollection();
     }
+
 }
