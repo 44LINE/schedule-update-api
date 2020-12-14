@@ -143,5 +143,5 @@ Defined contracts within service package:
        }
     }
     
- As we can se above the only was way to get TemporaryFile is to call method with InputStream as param.
+ As we can se above the only way to get TemporaryFile is to call method with InputStream as param.
  TemporaryFile is destroyed after calling exit method on him.
