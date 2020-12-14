@@ -13,8 +13,8 @@
 >   * [Details](#details)
 >     * [Libraries](#libraries)
 >     * [Packages](#packages)
->       * [apachepoi](#apachepoi)
 >       * [service](#service)
+>       * [apachepoi](#apachepoi)
 >       * [utils](#utils)
 >       * [enums](#enums)
 
@@ -24,12 +24,29 @@
 
 | LIBRARY | USAGE | 
 | ------- | ----- | 
-| lombok v1.18.18 | boiler plate code reduction |
-| hateoas | data representation |
+| jsoup | fetching HTML document |
+| apache poi | parsing stylesheet |
 | postgresql | database driver |
-| junit | unit tests |
-| mockito | unit layer and integration tests |
-| h2 v1.4.2 | JPQL queries tests | 
 
 ### Packages
+
+##### service
+  To automate the update job used ScheduledExecutorService in combination with the observer design pattern
+
+    private final List<Observer> observers;
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+    ...
+    @Override
+    public void notifyObservers() {
+        for (Observer observer: this.observers) {
+            observer.update();
+        }
+    }
+    ...
+    public void enable() {
+        scheduler.scheduleWithFixedDelay(track, 0, 15, TimeUnit.MINUTES);
+    }
+    
+
+##### apachepoi
 
