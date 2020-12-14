@@ -16,7 +16,6 @@
 >       * [service](#service)
 >       * [apachepoi](#apachepoi)
 >       * [utils](#utils)
->       * [enums](#enums)
 
 ## Details
 
@@ -104,4 +103,45 @@ Defined contracts within service package:
  
  #### utils
 
+  The class that represents the in-memory file is noteworthy in this package
+  
+    public final class TemporaryFile {
+      private TemporaryFile() {
+          throw new AssertionError();
+      }
 
+      public static Optional<File> writeInputStreamToFile(InputStream inputStream) {
+          if (Objects.isNull(inputStream)) {
+              throw new NullPointerException("InputStream cannot be null value.");
+          }
+
+          File file = newTemporaryFile()
+                  .orElseThrow(IllegalStateException::new);
+
+          try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
+              byte[] buffer = new byte[1024];
+              int lenght = 0;
+              while ((lenght = inputStream.read(buffer)) != -1) {
+                  fileOutputStream.write(buffer, 0, lenght);
+              }
+          } catch (IOException e) {
+              e.printStackTrace();
+              return Optional.empty();
+         }
+          return Optional.of(file);
+      }
+
+      private static Optional<File> newTemporaryFile() {
+          try {
+              File file = File.createTempFile("temp", null);
+              file.deleteOnExit();
+              return Optional.of(file);
+          } catch (IOException e) {
+              e.printStackTrace();
+              return Optional.empty();
+          }
+       }
+    }
+    
+ As we can se above the only was way to get TemporaryFile is to call method with InputStream as param.
+ TemporaryFile is destroyed after calling exit method on him.
