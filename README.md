@@ -80,12 +80,7 @@ Defined contracts within service package:
             ScheduleVersion scheduleVersion = new ScheduleVersion();
             Optional<Schedule> schedule = scheduleFactory.create(scheduleVersion, url.get());
             if (schedule.isPresent()) {
-                logger.info("Done.");
-                scheduleVersion.setId(null);
-                scheduleVersion.setUrl(url.get().toString());
-                scheduleVersion.setUpdateDate(date.get());
-                scheduleVersion.setSchedule(schedule.get());
-                scheduleVersion.setAdditionDate(LocalDateTime.now());
+                ...
                 return schedule;
                 }
               }
@@ -99,15 +94,14 @@ Defined contracts within service package:
             public Optional<Schedule> create(ScheduleVersion scheduleVersion, URL url) {
               Optional<List<List<String>>> preparedCollections = fetchAndPrepareData(url);
                 if (preparedCollections.isPresent()) {
-                  Schedule schedule = new Schedule();
-                  schedule.setLatest(true);
-                  schedule.setScheduleVersion(scheduleVersion);
+                  ...
                   schedule.setDailySchedule(factory.createCollection(schedule, preparedCollections.get()));
                   return Optional.of(schedule);
                 }
               return Optional.empty();
             }     
   
-  
-    
+ 
+ #### utils
+
 
