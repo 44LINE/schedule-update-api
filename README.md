@@ -30,8 +30,9 @@
 
 ### Packages
 
-##### service
-  To automate the update job used ScheduledExecutorService in combination with the observer design pattern
+#### service
+
+  To automate the update job used ScheduledExecutorService in combination with the observer design pattern:
 
     private final List<Observer> observers;
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -48,5 +49,20 @@
     }
     
 
-##### apachepoi
+Defined contracts within service package:
+
+    public interface ScheduleUpdateHandler {
+        Optional<Schedule> handle();
+    }
+    
+    public interface EntityFactory<T, S, V> {
+        Optional<T> create(S selfReference, V argument);
+    }
+    
+    public interface EntityCollectionFactory<T, S, V> {
+        List<T> createCollection(S selfReference, List<V> collection);
+    }
+
+
+#### apachepoi
 
